@@ -1,0 +1,45 @@
+{
+  "name": "fastlearners",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-babel-istanbul": "^1.6.0",
+    "gulp-coverage": "^0.3.38",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-inject-modules": "^1.0.0",
+    "gulp-istanbul-report": "0.0.1",
+    "gulp-jasmine-node": "^1.0.7",
+    "jasmine-node": "^1.14.5",
+    "promise": "^7.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^5.0.1",
+    "eslint-plugin-react": "^7.0.1"
+  },
+  "scripts": {
+    "test": "gulp run-tests",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tundewritescode/bc-22-dlc.git"
+  },
+  "author": "Andela 21 Team A",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tundewritescode/bc-22-dlc/issues"
+  },
+  "homepage": "https://github.com/tundewritescode/bc-22-dlc#readme"
+}
