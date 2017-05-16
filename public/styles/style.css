@@ -9,7 +9,11 @@
 }
 .content {
   padding-left: 320px;
-  padding-right: 20px; 
+  padding-right: 20px;
+  min-height: calc(100vh - 100px);
+}
+#content-categories {
+  margin-top: 70px;
 }
 .section-header, .section-footer {
   padding-left: 300px;
@@ -30,7 +34,7 @@
 	height: 300px;
 }
 #course-categories {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .section-headers {
   margin-left: auto;
@@ -45,4 +49,20 @@
 }
 .img {
   margin-top: 40px;
+}
+#profile-pic {
+  height: 100px;
+  width:100px;
+}
+#user-profile {
+  margin-top: 20px;
+}
+.user-stats {
+  margin-top: 5%;
+}
+.user-courses {
+  padding-top: 5px;
+}
+.about {
+  padding-bottom: 25px;
 }
