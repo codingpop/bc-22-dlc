@@ -1,11 +1,185 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>fastLearners</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../public/styles/style.css">
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <header>
+      <nav>
+        <div class="nav-wrapper grey darken-3">
+          <a href="#" class="brand-logo" id="brand-size">
+            <span class="orange-text text-accent-1">fast</span>
+            <span class="brown-text text-lighten-2">Learners</span>
+          </a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/users/signin">Sign In</a></li>
+            <li><a href="/users/signup">Sign Up</a></li>
+          </ul>
+        </div> <!-- nav-wrapper -->
+      </nav>
+      <div>
+        <img src="../public/images/learn5.png" class='images'>
+      </div>
+      <!--<div class="carousel carousel-slider data-indicators='true'">
+        <a class="carousel-item" href="#one!"><img src="../public/images/learn1.jpg"></a>
+        <a class="carousel-item" href="#two!"><img src="../public/images/learn2.jpg"></a>
+        <a class="carousel-item" href="#three!"><img src="../public/images/learn3.jpg"></a>
+        <a class="carousel-item" href="#four!"><img src="../public/images/learn4.jpg"></a>
+        <a class="carousel-item" href="#five!"><img src="../public/images/learn5.png"></a>
+      </div>-->
+    </header><!-- carousel -->
+
+    <div class="container">
+
+      <section class="features">
+        <div class="section-headers center-align"><h4>Top Features</h4></div>
+        <div class="row center-align" id="top-features">
+          <div class="col s4">
+            <i class="large material-icons">supervisor_account</i>
+            <p>Join a community</p>
+          </div>
+          <div class="col s4">
+            <i class="large material-icons">verified_user</i>
+            <p>Track and accomplish your goals</p>
+          </div>
+          <div class="col s4">
+            <i class="large material-icons">reorder</i>
+            <p>Own your learning</p>
+          </div>
+        </div><!-- top-features -->
+      </section><!-- features -->
+
+
+      <section class="courses">
+        <div class="section-headers center-align"><h4>Top Courses</h4></div>
+
+          <div class="row" id="top-courses">
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Artificial Intelligence</span>
+                  <p>Dive into the world of artficial Intelligence and experience the thrill of machine learning,
+                    robotics, natural language processing etc.
+                    Approx. Time: 320 hrs
+                    Popularity: 1654 students
+                  </p>
+                </div>
+                <div class="card-action">
+                  <a href="#">View</a>
+                </div>
+              </div>
+            </div>
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Card Title</span>
+                  <p>I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively.</p>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Card Title</span>
+                  <p>I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively.</p>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Card Title</span>
+                  <p>I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively.</p>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>            
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Card Title</span>
+                  <p>I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively.</p>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>           
+            <div class="col s4">
+              <div class="card">
+                <div class="card-content black-text">
+                  <span class="card-title">Card Title</span>
+                  <p>I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively.</p>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>
+          </div><!-- top-courses -->
+      </section><!-- courses -->
+
+      <section class="about">
+        <div class="section-headers center-align"><h4>About</h4></div>
+        <h6>Learn everything you need to know to get started building Android apps with Google's Android Studio 
+          and Android SDK. Made for beginners, we will learn about setting up our environment, building menus, 
+          and even begin Android game development!
+          Learn everything you need to know to get started building Android apps with Google's Android Studio 
+          and Android SDK. Made for beginners, we will learn about setting up our environment, building menus, 
+          and even begin Android game development!</h6>
+      </section>
+
+    </div><!-- container -->
+
+
+    <footer class="page-footer grey darken-3">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Footer Content</h5>
+            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Links</h5>
+            <ul>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2014 Copyright Text
+        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="../public/script/init.js"></script>
   </body>
 </html>
