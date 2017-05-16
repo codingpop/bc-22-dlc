@@ -1,8 +1,4 @@
 /node_modules
-<<<<<<< HEAD
-/coverage
-/dist
-=======
 .env
 dist
->>>>>>> dc0c60f5c4344bc2f832b06f8b1f40e63584ed02
+coverage

@@ -14,7 +14,14 @@
 }
 #content-categories {
   margin-top: 70px;
+  padding-right: 20px; 
 }
+
+.side-nav h5 {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
 .section-header, .section-footer {
   padding-left: 300px;
 }
@@ -34,7 +41,7 @@
 	height: 300px;
 }
 #course-categories {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 .section-headers {
   margin-left: auto;

@@ -17,10 +17,6 @@ router.get('/signup', (req, res) => {
 router.post('/signup', (req, res) => {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
-  const street_address = req.body.street_address;
-  const city = req.body.city;
-  const state = req.body.state;
-  const zip = req.body.zip;
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
@@ -42,10 +38,6 @@ if(errors){
     errors,
     first_name,
     last_name,
-    street_address,
-    city,
-    state,
-    zip,
     email,
     username,
     password,
@@ -56,17 +48,11 @@ if(errors){
     email,
     username,
     password,
-    role: 'student';
+    role: 'student'
   });
   const newStudent = new Student({
     first_name,
     last_name,
-    address:[{
-      street_address,
-      city,
-      state,
-      zip,
-    }],
     email,
     username
   });
@@ -75,7 +61,7 @@ if(errors){
   });
   
   req.flash('success', 'User added');
-  res.redirect('/');
+  res.redirect('/dashboard');
 }
 
 });
@@ -90,23 +76,23 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-router.post('/login', passport.authenticate('local', {failureRedirect: '/', failureFlash: 'Wrong User name and password'}, (req, res) => {
+router.post('/signin', passport.authenticate('local', {failureRedirect: '/', failureFlash: 'Wrong User name and password'}, (req, res) => {
   req.flash('success', 'You are now Log in');
   res.redirect('/');
-});
+}));
 
 passport.use(new localStrategy(
   (username, password, done) => {
     User.getUserByUsername(username, (err, user) => {
       if (err) throw err;
       if(!user){
-        return done(null, false, {message: `Unknown User $(username)`});
+        return done(null, false, {message: `Unknown User $(username)` });
       }
       
       User.comparePassword(password, user.password, (err, isMatch) => {
-        if(err) return done(err);
-        if(isMatch){
-          retrun done(null, user);
+        if (err) return done(err); 
+        if (isMatch){
+          return done(null, user)
         } else {
           console.log('Invalid Password');
           return done(null, false, {message : 'Invalid Password'});
