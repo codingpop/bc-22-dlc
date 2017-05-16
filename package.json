@@ -4,24 +4,16 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node dist/app.js"
+    "test": "gulp run-tests",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "directories": {
     "test": "tests"
   },
   "dependencies": {
+    "async": "^2.4.0",
     "babel-cli": "^6.24.1",
     "babel-register": "^6.24.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-babel-istanbul": "^1.6.0",
-    "gulp-coverage": "^0.3.38",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-inject-modules": "^1.0.0",
-    "gulp-istanbul-report": "0.0.1",
-    "gulp-jasmine-node": "^1.0.7",
-    "jasmine-node": "^1.14.5",
-    "promise": "^7.1.1",
     "bcryptjs": "*",
     "body-parser": "~1.16.0",
     "connect-flash": "*",
@@ -33,12 +25,22 @@
     "express-messages": "*",
     "express-session": "*",
     "express-validator": "*",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-babel-istanbul": "^1.6.0",
+    "gulp-coverage": "^0.3.38",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-inject-modules": "^1.0.0",
+    "gulp-istanbul-report": "0.0.1",
+    "gulp-jasmine-node": "^1.0.7",
+    "jasmine-node": "^1.14.5",
     "mongodb": "*",
     "mongoose": "*",
     "morgan": "~1.7.0",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
+    "promise": "^7.1.1",
     "serve-favicon": "~2.3.2"
   },
   "devDependencies": {
@@ -48,10 +50,6 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.0.1"
-  },
-  "scripts": {
-    "test": "gulp run-tests",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
