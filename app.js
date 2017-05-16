@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
 import index from './routes/index';
 import users from './routes/users';
 
-mongoose.connect('mongodb:/');
+mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
 const db = mongoose.connection;
 
 const localStrategy = passportLocal.Strategy;
