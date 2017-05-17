@@ -37,6 +37,9 @@
       <div class="col s7 login">
         <h4 class="center-align">Sign Up</h4>
         <form class="push-s2 col s9" method="post" action="/signup">
+          <% if (error) { %>
+            <li><%= error %></li>  
+            <% } %>
           <div class="row">
             <div class="input-field col s12">
                 <input id="first_name" name="first_name" type="text" class="validate pink-text.text-lighten-2">
