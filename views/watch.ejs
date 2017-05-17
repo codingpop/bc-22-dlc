@@ -4,7 +4,7 @@
   <title>fastLearners</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="../public/styles/style.css">
+  <link rel="stylesheet" href="/styles/style.css">
 </head>
 
 <body>
@@ -13,19 +13,19 @@
     <li>
       <div class="userView">
         <div class="background">
-          <img src="../public/images/cover.jpg" id="cover">
+          <img src="/images/cover.jpg" id="cover">
         </div>
         <!-- background -->
-        <img class="circle" src="../public/images/flashindex-logo.jpg" id="logo-picture">
+        <img class="circle" src="/images/flashindex-logo.jpg" id="logo-picture">
         <span class="white-text name">fastLearners</span>
         <span class="white-text email">The fastest way to own your learning</span>
       </div>
       <!-- userView -->
     </li>
-    <h5 class="white-text">LET'S LEARN ES6</h5>
-    <li><a class="waves-effect white-text" href="#!">Let, Const, Template Literals</a></li>
-    <li><a class="waves-effect white-text" href="#!">Arrow Functions</a></li>
-    <li><a class="waves-effect white-text" href="#!">Spread Operator &amp; Spread Parameter</a></li>
+    <h5 class="white-text"><%= item.title.toUpperCase() %></h5>
+    <% item.chapters.forEach((chapter) => { %>
+      <li><a class="waves-effect white-text" href="#!"><%- chapter.name %></a></li>
+    <% }) %>
   </ul>
   <!-- side-nav fixed sidenav-color -->
 
@@ -46,7 +46,7 @@
   <!-- section-header -->
 
   <div class="content">
-    <h4>LET'S LEARN ES6</h4>
+    <h4><%= item.title.toUpperCase() %></h4>
     <div class="row" id="course-categories">
       <div class="col s12">
         <div class="video-container">
@@ -92,7 +92,7 @@
 
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
-  <script type="text/javascript" src="../public/script/init.js"></script>
+  <script type="text/javascript" src="/script/init.js"></script>
 </body>
 
 </html>

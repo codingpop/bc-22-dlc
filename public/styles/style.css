@@ -57,6 +57,7 @@
 .img {
   margin-top: 40px;
 }
+
 #profile-pic {
   height: 100px;
   width:100px;
@@ -77,4 +78,10 @@
   font-size: 17px;
   font-family: Helvetica;
   text-align: justify;
+}
+.card {
+  height: 320px;
+}
+.card-content {
+  height: 250px;
 }

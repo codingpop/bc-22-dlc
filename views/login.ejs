@@ -21,12 +21,11 @@
         </div> <!-- nav-wrapper -->
       </nav>
     </header>
-
     <div class="row">
       <div class="col s5 img">
         <h4 class="center-align">Welcome to
-          <span class="orange-text text-accent-1"> fast</span>
-          <span class="brown-text text-lighten-2">Learners</span>!!!</h4>
+            <span class="orange-text text-accent-1"> fast</span>
+            <span class="brown-text text-lighten-2">Learners</span>!!!</h4>
         <img src="../public/images/huddle.jpg">
 
         <div class="comments">
@@ -35,34 +34,28 @@
       </div><!-- col s5 img -->
 
       <div class="col s7 login">
-        <h4 class="center-align">Sign Up</h4>
-        <form class="push-s2 col s9" method="post">
+        <h4 class="center-align">Log In</h4>
+        <form class="push-s2 col s9" method="post" action="/signin">
           <div class="row">
             <div class="input-field col s12">
-                <input id="first_name" name="first_name" type="text" class="validate pink-text.text-lighten-2">
-                <label for="first_name">First Name</label>
-              </div>
-              <div class="input-field col s12">
-                <input id="last_name" name="last_name" type="text" class="validate pink-text.text-lighten-2">
-                <label for="last_name">Last Name</label>
-              </div>
-
-              <div class="input-field col s12">
-                <input id="email" name="email" type="email" class="validate pink-text.text-lighten-2">
-                <label for="email">Email</label>
-              </div>
-              <div class="input-field col s12">
-                <input id="password" name="password" type="password" class="validate pink-text.text-lighten-2">
-                <label for="password">Password</label>
-              </div>
+              <input id="email" name="username" type="email" class="validate">
+              <label for="email">Email</label>
+            </div>
           </div>
           <div class="row">
-          <button type="submit" class="waves-effect waves-light btn col s12">Sign Up</button>
+            <div class="input-field col s12">
+              <input id="password" name="password" type="password" class="validate">
+              <label for="password">Password</label>
+            </div>
+          </div>
+          <div class="row">
+            <button type="submit" class="waves-effect waves-light btn col s12" id="login">Log In</button>
           </div>
         </form>
 
         <div class="clearfix options">
-	    	  <p class="black-text">Already have an account? <a href="#">Log in</a></p>
+	    	  <p class="black-text">Forgot your password? <a href="#">Reset it</a></p>
+	    	  <p class="black-text">Don't have an account? <a href="/signup">Create a fast Learners Account</a></p>
 		    </div>
       </div><!-- col s7 login -->
     </div><!-- row -->

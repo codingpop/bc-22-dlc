@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
 
 const courseSchema = mongoose.Schema({
-  course_id: mongoose.Schema.Types.ObjectId,
-  course_title: String,
-  description: String,
+  _id: mongoose.Schema.Types.ObjectId,
+  title: String,
+  desc: String,
   chapters: Array,
   author: String
 });
