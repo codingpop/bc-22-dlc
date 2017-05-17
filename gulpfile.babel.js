@@ -1,3 +1,4 @@
+/* eslint linebreak-style: ["error", "windows"]*/
 import gulp from 'gulp';
 import babel from 'gulp-babel';
 import jasmineNode from 'gulp-jasmine-node';
@@ -6,7 +7,8 @@ import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
 
 gulp.task('transpile', () =>
-gulp.src(['./**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
+gulp.src(['src/**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
+
 .pipe(babel()).pipe(gulp.dest('dist')));
 
 gulp.task('run-tests', ['transpile'], () =>
