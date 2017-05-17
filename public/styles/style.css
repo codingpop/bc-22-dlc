@@ -82,7 +82,11 @@
 }
 .card {
   height: 320px;
+  margin-top: 50px;
 }
 .card-content {
   height: 250px;
+}
+.page-footer li {
+  display: inline;
 }
