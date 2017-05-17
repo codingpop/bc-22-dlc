@@ -5,14 +5,20 @@ import istanbul from 'gulp-babel-istanbul';
 import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
 
-gulp.task('transpile', ['transfer'], () =>
+gulp.task('transfer-images', () => {
+  gulp.src('public/images/**')
+  .pipe(gulp.dest('dist/public/images'));
+});
+
+gulp.task('transfer-styles', () => {
+  gulp.src('public/styles/**')
+  .pipe(gulp.dest('dist/public/styles'));
+});
+
+gulp.task('transpile', ['transfer-images', 'transfer-styles'], () =>
 gulp.src(['./**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
 .pipe(babel()).pipe(gulp.dest('dist')));
 
-gulp.task('transfer', () => {
-  gulp.src('./**/*.ejs, ./**/*.css, ./**/*.jpg, ./**/*.png')
-  .pipe(gulp.dest('dist'));
-});
 
 gulp.task('run-tests', ['transpile'], () =>
 gulp.src(['tests/**.js'])
