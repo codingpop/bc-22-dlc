@@ -9,8 +9,6 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import router from './routes/route';
 
-// mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
-
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
