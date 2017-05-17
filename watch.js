@@ -1,5 +1,5 @@
-import express from 'express';
-import Course from '../models/course';
+const express = require('express');
+const Course = require('../models/course');
 
 const newCourse = Course({
   course_title: 'Machine Learning in 24 Hours',
@@ -20,6 +20,8 @@ const newCourse = Course({
   ],
   author: 'Babatunde Adeyemi'
 });
+
+const watch = express();
 
 newCourse.save((err) => {
   if (err) {
