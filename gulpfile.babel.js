@@ -7,12 +7,12 @@ import coveralls from 'gulp-coveralls';
 
 gulp.task('transfer-images', () => {
   gulp.src('public/images/**')
-  .pipe(gulp.dest('dist/public/images'));
+  .pipe(gulp.dest('dist/images'));
 });
 
 gulp.task('transfer-styles', () => {
   gulp.src('public/styles/**')
-  .pipe(gulp.dest('dist/public/styles'));
+  .pipe(gulp.dest('dist/styles'));
 });
 
 gulp.task('transpile', ['transfer-images', 'transfer-styles'], () =>
