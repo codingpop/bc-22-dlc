@@ -11,6 +11,13 @@ const router = express.Router();
 // Nurudeen starts here
 let sess;
 
+router.get('/', (req, res) => {
+  Course.find((err, data) => {
+    if (err) throw err;
+    res.render('index', { items: data });
+  }).sort({_id : -1 }).limit(6);
+});
+
 router.get('/logout', (req, res) => {
   sess = req.session;
   req.session.destroy((err) => {
@@ -173,13 +180,6 @@ router.post('/login', (req, res) => {
       res.render('login.ejs', { error: 'User does not exist', inputedValues: req.body });
     }
   });
-});
-
-router.get('/', (req, res) => {
-  Course.find((err, data) => {
-    if (err) throw err;
-    res.render('index', { items: data });
-  }).sort({_id : -1 }).limit(6);
 });
 
 router.get('/watch/:id', (req, res) => {

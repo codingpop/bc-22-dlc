@@ -78,79 +78,20 @@
         <div class="section-headers center-align"><h4>Top Courses</h4></div>
 
           <div class="row" id="top-courses">
+            <% items.forEach((result) => { %>
             <div class="col s4">
               <div class="card hoverable">
                 <div class="card-content black-text">
-                  <span class="card-title">Artificial Intelligence</span>
-                  <p>Dive into the world of artficial Intelligence and experience the thrill of machine learning,
-                    robotics, natural language processing etc.
+                  <span class="card-title"><%= result.title %></span>
+                  <p><%= result.desc %>
                   </p>
                 </div>
                 <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
+                  <a href="/signup">TAKE COURSE</a>
                 </div>
               </div>
             </div>
-            <div class="col s4">
-              <div class="card hoverable">
-                <div class="card-content black-text">
-                  <span class="card-title">Card Title</span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
-                </div>
-              </div>
-            </div>
-            <div class="col s4">
-              <div class="card hoverable">
-                <div class="card-content black-text">
-                  <span class="card-title">Card Title</span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
-                </div>
-              </div>
-            </div>
-            <div class="col s4">
-              <div class="card hoverable">
-                <div class="card-content black-text">
-                  <span class="card-title">Card Title</span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
-                </div>
-              </div>
-            </div>            
-            <div class="col s4">
-              <div class="card hoverable">
-                <div class="card-content black-text">
-                  <span class="card-title">Card Title</span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
-                </div>
-              </div>
-            </div>           
-            <div class="col s4">
-              <div class="card hoverable">
-                <div class="card-content black-text">
-                  <span class="card-title">Card Title</span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">TAKE COURSE</a>
-                </div>
-              </div>
-            </div>
+            <% }); %>
           </div><!-- top-courses -->
       </section><!-- courses -->
 

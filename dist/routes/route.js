@@ -37,6 +37,13 @@ var router = _express2.default.Router();
 // Nurudeen starts here
 var sess = void 0;
 
+router.get('/', function (req, res) {
+  _course2.default.find(function (err, data) {
+    if (err) throw err;
+    res.render('index', { items: data });
+  }).sort({ _id: -1 }).limit(6);
+});
+
 router.get('/logout', function (req, res) {
   sess = req.session;
   req.session.destroy(function (err) {
@@ -200,13 +207,6 @@ router.post('/login', function (req, res) {
   });
 });
 
-router.get('/', function (req, res) {
-  _course2.default.find(function (err, data) {
-    if (err) throw err;
-    res.render('index', { items: data });
-  }).sort({ _id: -1 }).limit(6);
-});
-
 router.get('/watch/:id', function (req, res) {
   var idValue = req.params.id;
   _course2.default.findOne({ _id: idValue }, function (err, data) {
@@ -230,10 +230,6 @@ router.get('/watch/video/:video', function (req, res) {
     });
     res.render('watch', { item: data, video: display });
   });
-});
-
-router.get('/library', function (req, res) {
-  res.render('library');
 });
 
 router.get('/profile', function (req, res) {
