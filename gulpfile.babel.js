@@ -7,7 +7,8 @@ import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
 
 gulp.task('transpile', () =>
-gulp.src(['src/**.js', 'tests/**.js', 'index.js'])
+gulp.src(['src/**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
+
 .pipe(babel()).pipe(gulp.dest('dist')));
 
 gulp.task('run-tests', ['transpile'], () =>

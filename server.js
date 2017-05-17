@@ -1,4 +1,3 @@
-/* eslint linebreak-style: ["error", "windows"]*/
 import express from 'express';
 import bodyParser from 'body-parser';
 import router from './routes/route';
@@ -14,3 +13,4 @@ app.listen(process.env.PORT || 3000, () => {
 });
 
 app.use('/', router);
+

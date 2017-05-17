@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+
+</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1"/>
+    <style>
+
+    </style>
+</head>
+<body>
+	<div class="container">
+        <form action="/showresult" method="post">
+		<h1 id="header">DLC</h1>
+        <% for(var i=0;i<questions.length;i++){%>
+            <div><%= (i+1)+". "+questions[i].question%></div>
+            <div><input type="radio" name= "<%=i+1%>" class= "<%=i+1%>" value="<%=questions[i].option1%>"><%=questions[i].option1%></input></div>
+            <div><input type="radio" name= "<%=i+1%>" class= "<%=i+1%>" value="<%=questions[i].option2%>"><%=questions[i].option2%></input></div>
+            <div><input type="radio" name= "<%=i+1%>" class= "<%=i+1%>" value="<%=questions[i].option3%>"><%=questions[i].option3%></input></div>
+            <div><input type="radio" name= "<%=i+1%>" class= "<%=i+1%>" value="<%=questions[i].option4%>"><%=questions[i].option4%></input></div>
+            <div><input type="hidden" name= "<%=i+1%>" class= "<%=i+1%>" value="<%=questions[i].correctAnswer%>"></input></div><br>
+        <%}%>
+        <div><input type="submit" value="Submit Quiz" id="submitquiz"/></div>
+        </form>
+	</div>
+        <script type="text/javascript" src="showquiz.js"></script>
+</body>
+</html>
