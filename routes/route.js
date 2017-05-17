@@ -207,10 +207,6 @@ router.get('/watch/video/:video', (req, res) => {
   });
 });
 
-router.get('/library', (req, res) => {
-  res.render('library');
-});
-
 router.get('/profile', (req, res) => {
   const results = db.getResult(sess.user);
   results.then((records) => {
