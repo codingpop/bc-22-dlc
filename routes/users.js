@@ -12,7 +12,7 @@ const router = express.Router();
 /* GET users listing. */
 router.get('/signup', (req, res) => {
   res.render('signup');
-});
+});-
 
 router.post('/signup', (req, res) => {
   const first_name = req.body.first_name;

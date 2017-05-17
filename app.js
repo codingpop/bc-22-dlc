@@ -7,7 +7,6 @@ import flash from 'connect-flash';
 import session from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import mongo from 'mongodb';
 import mongoose from 'mongoose';
 import index from './routes/index';
 import users from './routes/users';
@@ -24,17 +23,17 @@ const app = express();
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle express session
 app.use(session({
-    secret:'secret',
-    saveUninitialized: true,
-    resave:true
-}))
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
+}));
 
 // initialize passport
 app.use(passport.initialize());
@@ -47,7 +46,7 @@ app.use(expressValidator({
       , root    = namespace.shift()
       , formParam = root;
 
-    while(namespace.length) {
+    while (namespace.length) {
       formParam += '[' + namespace.shift() + ']';
     }
     return {
@@ -67,16 +66,17 @@ app.get('*', (req, res, next) => {
 
 // flash
 app.use(flash());
-app.use((req, res, next) =>{
-    res.locals.messages = require('express-messages')(req, res);
-    next();
+app.use((req, res, next) => {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
 });
 
 app.use('/', index);
 app.use('/users', users);
 
-app.listen(process.env.PORT, () => {
-  console.log('server now running at ' + process.env.PORT);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log('server now running at', port);
 });
 
 module.exports = app;

@@ -71,3 +71,6 @@
   font-family: Helvetica;
   text-align: justify;
 }
+.card {
+  height: 280px;
+}
