@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title> Forum </title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+  <title> fastlearners | Community </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/styles/style.css">
   </head>
   <body>
     <div class="navbar-fixed">
       <nav class="black">
           <div class="nav-wrapper">
+        <a href="/dashboard"><img class="circle" src="/images/flashindex-logo.jpg" id="logo-picture" style="height: 40px; vertical-align: middle"></a>
+        <span class="white-text name" style="size: 50px">fastLearners</span>
             <!-- to be moved to the center -->
               <ul class="center" style="height:10px;">
                   <li><b class="center" id="centralDisplay"></b></li>
@@ -80,7 +82,7 @@
           <form action="#">
           <h4 class="center-align">Add your Answer</h4>
           <div class="row">
-            <span id="msgdisplay"></span>
+            <span id="msgdisplay" style="color: red; font-size: 30px;"></span>
             <div class="input-field col s12">
               <textarea id="answer" class="materialize-textarea" required maxlength="200" name="answer"></textarea>
               <label for="textarea1">Enter your Question.</label>

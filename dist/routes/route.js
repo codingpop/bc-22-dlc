@@ -337,7 +337,7 @@ router.get('/forum', function (req, res) {
           throw err;
         } else {
           var totalRecords = totalQuestion.length;
-          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords });
+          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords, user: sess.user });
         }
       });
     });
