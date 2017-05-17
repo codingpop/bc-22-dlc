@@ -34,7 +34,17 @@ class AssessmentDatabase {
       date: { type: String, default: Date.now() }
     });
     this.result = mongoose.model('Results', resultSchema);
+
+    const userSchema = new mongoose.Schema({
+      first_name: String,
+      last_name: String,
+      email: String,
+      username: String,
+      password: String,
+    });
+    this.user = mongoose.model('users', userSchema);
   }
+
 
 /**
  * @description saves questions into database
@@ -109,6 +119,31 @@ class AssessmentDatabase {
     const result = this.result.find({ user: username }).sort({ _id: -1 }).exec();
     return result;
   }
+
+  getUserByUsername(user_name) {
+    const result = this.user.find({ username: user_name }).exec();
+    return result;
+  }
+  getUserByEmail(eMail) {
+    const result = this.user.find({ email: eMail }).exec();
+    return result;
+  }
+
+  registerUsers(firstName, lastName, eMail, userName, passWord) {
+    const userToInsert = new this.user({
+      first_name: firstName,
+      last_name: lastName,
+      email: eMail,
+      username: userName,
+      password: passWord
+    });
+    userToInsert.save((err) => {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+  }
 }
+
 
 export default new AssessmentDatabase();

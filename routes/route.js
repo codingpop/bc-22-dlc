@@ -1,23 +1,28 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import db from '../config/database';
 
-import assessment from '../config/assessment-database';
+
+const router = express.Router();
 
 
-
+// Nurudeen starts here
 
 router.get('/', (req, res) => {
   const username = 'noordean';
-  const results = assessment.getResult(username);
+  const results = db.getResult(username);
   results.then((result) => {
    // get username from session to replace noordean
     res.render('studentsdashboard.ejs', { user: username, lastResult: result[0].score });
   });
 });
 
-router.get('/addquestion', (req, res) => {
+
+router.get('/savequestion', (req, res) => {
   res.render('addquestion.ejs');
 });
 
-router.post('/addquestion', (req, res) => {
+router.post('/savequestion', (req, res) => {
   const question = req.body.question;
   const option1 = req.body.option1;
   const option2 = req.body.option2;
@@ -25,7 +30,7 @@ router.post('/addquestion', (req, res) => {
   const option4 = req.body.option4;
   const rightAnswer = req.body.rightanswer;
   const course = req.body.course;
-  res.send(assessment.saveQuestion(question, option1, option2, option3, option4, rightAnswer, course));
+  res.send(db.saveQuestion(question, option1, option2, option3, option4, rightAnswer, course));
 });
 
 router.get('/startquiz', (req, res) => {
@@ -34,7 +39,7 @@ router.get('/startquiz', (req, res) => {
 
 router.get('/loadquiz', (req, res) => {
   // 'Javascript will be replaced with the student's course'
-  const result = assessment.getQuestions("Let's Learn ES6");
+  const result = db.getQuestions("Let's Learn ES6");
   result.then((loadedQuestion) => {
     res.render('doquiz.ejs', { questions: loadedQuestion });
   });
@@ -55,30 +60,64 @@ router.post('/showresult', (req, res) => {
   }
 
   // save the result to database;
-  assessment.saveResult(user, scores, course);
+  db.saveResult(user, scores, course);
   res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
 });
 
 router.get('/showallresult', (req, res) => {
   const username = 'noordean';
-  const results = assessment.getResult(username);
+  const results = db.getResult(username);
   results.then((resultt) => {
     res.render('showallresult.ejs', { result: resultt });
   });
 });
 
-export default router;
+// Nurudeen stops here
+router.get('/signup', (req, res) => {
+  res.render('signup.ejs');
+});
 
-/* eslint linebreak-style: ["error", "windows"]*/
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+router.post('/signup', (req, res) => {
+  const userByUsername = db.getUserByUsername(req.body.username);
+  const userByEmail = db.getUserByEmail(req.body.email);
+  userByUsername.then((resultByUsername) => {
+    userByEmail.then((resultByEmail) => {
+      if (resultByUsername.length === 0 && resultByEmail.length === 0) {
+        // trim and escape user's inputs
+        req.sanitizeBody('first_name').trim();
+        req.sanitizeBody('first_name').escape();
+        req.sanitizeBody('last_name').trim();
+        req.sanitizeBody('last_name').escape();
+        req.sanitizeBody('username').trim();
+        req.sanitizeBody('username').escape();
+        req.sanitizeBody('email').trim();
+        req.sanitizeBody('email').escape();
+        req.sanitizeBody('password').trim();
+        req.sanitizeBody('password').escape();
+        req.sanitizeBody('password2').trim();
+        req.sanitizeBody('password2').escape();
 
-const router = express.Router();
-router.set('view engine', 'ejs');
-mongoose.connect('mongodb://noordean:ibrahim5327@ds161190.mlab.com:61190/nurudb');
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
+        // validate user inputs
+        req.checkBody('last_name', 'Lastname should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('first_name', 'Firstname should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('username', 'Username should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('email', 'A valid email address is required').notEmpty().isEmail();
+        req.checkBody('password', 'Password should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+
+        // collect validation errors
+        let errors = [];
+        if (req.validationErrors()) {
+          errors = req.validationErrors();
+        }
+        if (req.body.password !== req.body.retypePassword){
+          errors.push({ 'param': 'password', 'msg': 'The two passwords did not match' }); 
+        }
+      }
+    });
+  });
+});
+
+// Emmannuel starts here
 const Schema = mongoose.Schema;
 const question = new Schema({
   question: {
@@ -240,3 +279,5 @@ router.post('/addvote', (req, res) => {
     }
   });
 });
+
+export default router;
