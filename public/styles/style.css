@@ -14,7 +14,17 @@
 }
 #content-categories {
   margin-top: 70px;
+<<<<<<< HEAD
+=======
+  padding-right: 20px; 
+>>>>>>> 86589d7c7c950c93a4baa669826920cc1fd9023d
 }
+
+.side-nav h5 {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
 .section-header, .section-footer {
   padding-left: 300px;
 }
@@ -50,6 +60,10 @@
 .img {
   margin-top: 40px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86589d7c7c950c93a4baa669826920cc1fd9023d
 #profile-pic {
   height: 100px;
   width:100px;
@@ -72,5 +86,12 @@
   text-align: justify;
 }
 .card {
+<<<<<<< HEAD
   height: 280px;
+=======
+  height: 320px;
+}
+.card-content {
+  height: 250px;
+>>>>>>> 86589d7c7c950c93a4baa669826920cc1fd9023d
 }
