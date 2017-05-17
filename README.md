@@ -5,7 +5,7 @@ This is a learning community where learners from across world learn new skills, 
 - In your terminal, type ``` git clone https://github.com/tundewritescode/bc-22-dlc``` and press enter to clone this repo to your machine.
 - To install all the dependencies, enter ```npm install``` in your terminal.
 
-## How to run this API
+## How to run this this app
 - In your terminal, navigate to the cloned directory, and enter `gulp transpile`.
 - After transpiling, enter `node dist/server` to run the app.
 - Launch your browser and go to `http://localhost:3000` to use the app (also available on `https://fastlearner.herokuapp.com/`.
