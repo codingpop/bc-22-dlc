@@ -3,7 +3,7 @@
     <title>fastLearners</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../public/styles/style.css">
+    <link rel="stylesheet" href="styles/style.css">
   </head>
   <body>
     <header>
@@ -14,21 +14,43 @@
             <span class="brown-text text-lighten-2">Learners</span>
           </a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/users/signin">Sign In</a></li>
-            <li><a href="/users/signup">Sign Up</a></li>
+            <li><a href="/signin">Sign In</a></li>
+            <li><a href="/signup">Sign Up</a></li>
           </ul>
         </div> <!-- nav-wrapper -->
       </nav>
-      <div>
-        <img src="../public/images/learn5.png" class='images'>
+      <div class="slider">
+        <ul class="slides">
+          <li>
+            <img src="/images/learn5.png" class='images'>
+            <div class="image-tag caption left-align">
+              <h3>Join other fastLearners. Own your learning, Change the world.</h3>
+              <h5>
+                You learn at your pace. Whether it takes a day or a year, we would be right by your side every 
+                step of the way
+              </h5>
+            </div><!--image-tag-->
+          </li>
+          <li>
+            <img src="images/learn10.jpg" class='images'>
+            <div class="image-tag caption center-align">
+              <h3>We are not bound by location. Are you ?</h3>
+              <h5>Over a million people from diferrent part of the world are a member
+                of our community
+              </h5>
+            </div><!--image-tag-->
+          </li>
+          <li>
+            <img src="images/learn11.png" class='images'>
+            <div class="image-tag caption right-align">
+              <h3>Set your goals. We track your progress</h3>
+              <h5>We offer quality assessments and reviews for each course taken to help you 
+                measure your gowth
+              </h5>
+            </div><!--image-tag-->
+          </li>
+        </ul><!--slides-->
       </div>
-      <!--<div class="carousel carousel-slider data-indicators='true'">
-        <a class="carousel-item" href="#one!"><img src="../public/images/learn1.jpg"></a>
-        <a class="carousel-item" href="#two!"><img src="../public/images/learn2.jpg"></a>
-        <a class="carousel-item" href="#three!"><img src="../public/images/learn3.jpg"></a>
-        <a class="carousel-item" href="#four!"><img src="../public/images/learn4.jpg"></a>
-        <a class="carousel-item" href="#five!"><img src="../public/images/learn5.png"></a>
-      </div>-->
     </header><!-- carousel -->
 
     <div class="container">
@@ -57,7 +79,7 @@
 
           <div class="row" id="top-courses">
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Artificial Intelligence</span>
                   <p>Dive into the world of artficial Intelligence and experience the thrill of machine learning,
@@ -72,7 +94,7 @@
               </div>
             </div>
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Card Title</span>
                   <p>I am a very simple card. I am good at containing small bits of information.
@@ -85,7 +107,7 @@
               </div>
             </div>
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Card Title</span>
                   <p>I am a very simple card. I am good at containing small bits of information.
@@ -98,7 +120,7 @@
               </div>
             </div>
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Card Title</span>
                   <p>I am a very simple card. I am good at containing small bits of information.
@@ -111,7 +133,7 @@
               </div>
             </div>            
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Card Title</span>
                   <p>I am a very simple card. I am good at containing small bits of information.
@@ -124,7 +146,7 @@
               </div>
             </div>           
             <div class="col s4">
-              <div class="card">
+              <div class="card hoverable">
                 <div class="card-content black-text">
                   <span class="card-title">Card Title</span>
                   <p>I am a very simple card. I am good at containing small bits of information.
@@ -141,16 +163,14 @@
 
       <section class="about">
         <div class="section-headers center-align"><h4>About</h4></div>
-        <h6>Learn everything you need to know to get started building Android apps with Google's Android Studio 
-          and Android SDK. Made for beginners, we will learn about setting up our environment, building menus, 
-          and even begin Android game development!
-          Learn everything you need to know to get started building Android apps with Google's Android Studio 
-          and Android SDK. Made for beginners, we will learn about setting up our environment, building menus, 
-          and even begin Android game development!</h6>
+        <h6>fastLearners provides a structure for people to align around a shared goal. We bring effective 
+          communities that are both aspirational and practical. We connect people, organizations, and systems that are 
+          eager to learn across boundaries, all the while holding members accountable to a common agenda, 
+          metrics, and outcomes. We enable participants to share results and learn from each other, 
+          thereby improving their ability to achieve rapid yet significant progress.</h6>
       </section>
 
     </div><!-- container -->
-
 
     <footer class="page-footer grey darken-3">
       <div class="container">
@@ -180,6 +200,6 @@
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
-    <script type="text/javascript" src="../public/script/init.js"></script>
+    <script type="text/javascript" src="script/init.js"></script>
   </body>
 </html>
