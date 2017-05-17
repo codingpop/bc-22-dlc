@@ -68,15 +68,6 @@ router.get('/startquiz', function (req, res) {
   }
 });
 
-router.post('/loadquiz', function (req, res) {
-  sess = req.session;
-  sess.course = req.body.course;
-  var result = _database2.default.getQuestions(req.body.course);
-  result.then(function (loadedQuestion) {
-    res.send(loadedQuestion);
-  });
-});
-
 router.post('/showresult', function (req, res) {
   sess = req.session;
   if (sess.user) {
@@ -92,7 +83,7 @@ router.post('/showresult', function (req, res) {
     }
     // save the result to database;
     _database2.default.saveResult(sess.user, scores, sess.course);
-    res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+    res.render('showresult.ejs', { user: sess.user, score: scores, totalQuestionNo: 10 });
     // }
   } else {
     res.redirect('/');
@@ -232,11 +223,32 @@ router.get('/watch/video/:video', function (req, res) {
   });
 });
 
+router.get('/library', function (req, res) {
+  res.render('library');
+});
+
 router.get('/profile', function (req, res) {
-  var results = _database2.default.getResult(sess.user);
-  results.then(function (records) {
-    res.render('profile', { user: sess.user, lastResult: records });
-  });
+  sess = req.session;
+  if (sess.user) {
+    var results = _database2.default.getResult(sess.user);
+    results.then(function (records) {
+      res.render('profile', { user: sess.user, lastResult: records });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.get('/assessment', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    _course2.default.find(function (err, data) {
+      if (err) throw err;
+      res.render('assessment', { items: data, user: sess.user });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/dashboard', function (req, res) {
@@ -249,6 +261,18 @@ router.get('/dashboard', function (req, res) {
   } else {
     res.redirect('/');
   }
+});
+
+router.get('/quiz/:id', function (req, res) {
+  sess = req.session;
+  var idValue = req.params.id;
+  _course2.default.findOne({ _id: idValue }, function (err, data) {
+    if (err) throw err;
+    var result = _database2.default.getQuestions(data.title);
+    result.then(function (loadedQuestion) {
+      res.render('doquiz.ejs', { questions: loadedQuestion });
+    });
+  });
 });
 
 var Schema = _mongoose2.default.Schema;
@@ -313,7 +337,7 @@ router.get('/forum', function (req, res) {
           throw err;
         } else {
           var totalRecords = totalQuestion.length;
-          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords, user: sess.user });
+          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords });
         }
       });
     });
