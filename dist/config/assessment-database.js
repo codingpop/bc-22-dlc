@@ -26,7 +26,7 @@ var AssessmentDatabase = function () {
   function AssessmentDatabase() {
     _classCallCheck(this, AssessmentDatabase);
 
-    _mongoose2.default.connect('mongodb://noordean:ibrahim5327@ds161190.mlab.com:61190/nurudb');
+    _mongoose2.default.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
     var db = _mongoose2.default.connection;
     db.on('connected', function () {
       console.log('database connected');
@@ -79,7 +79,7 @@ var AssessmentDatabase = function () {
   }, {
     key: 'getQuestions',
     value: function getQuestions(studentCourse) {
-      var result = this.Question.find({ course: studentCourse }).exec();
+      var result = this.Question.find({ course: studentCourse }).limit(10).exec();
       return result;
     }
   }, {

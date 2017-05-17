@@ -10,7 +10,7 @@ class AssessmentDatabase {
  * @constructor
  */
   constructor() {
-    mongoose.connect('mongodb://noordean:ibrahim5327@ds161190.mlab.com:61190/nurudb');
+    mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
     const db = mongoose.connection;
     db.on('connected', () => {
       console.log('database connected');
@@ -36,6 +36,17 @@ class AssessmentDatabase {
     this.result = mongoose.model('Results', resultSchema);
   }
 
+/**
+ * @description saves questions into database
+ * @param {string} theQuestion
+ *  @param {string} optionA
+ *  @param {string} optionB
+ *  @param {string} optionC
+ *  @param {string} optionD
+ *  @param {string} rightAnswer
+ *  @param {string} courseOfStudy
+ * @return {String} nothing
+ */
   saveQuestion(theQuestion, optionA, optionB, optionC, optionD, rightAnswer, courseOfStudy) {
     const questionToPut = new this.Question({
       question: theQuestion,
@@ -58,11 +69,24 @@ class AssessmentDatabase {
     return result;
   }*/
 
+
+/**
+ * @description: gets 10 questions for quiz
+ * @param {string} studentCourse
+ *  @return {Object} result
+ */
   getQuestions(studentCourse) {
-    const result = this.Question.find({ course: studentCourse }).exec();
+    const result = this.Question.find({ course: studentCourse }).limit(10).exec();
     return result;
   }
 
+/**
+ * @description: saves result of the assessment
+ * @param {string} username
+ * @param {string} stdScore
+ * @param {string} theCourse
+ *  @return {String} nothing
+ */
   saveResult(username, stdScore, theCourse) {
     const resultToPut = new this.result({
       user: username,
@@ -76,6 +100,11 @@ class AssessmentDatabase {
     });
   }
 
+/**
+ * @description: gets assessment results
+ * @param {string} username
+ *  @return {Object} result
+ */
   getResult(username) {
     const result = this.result.find({ user: username }).sort({ _id: -1 }).exec();
     return result;

@@ -46,7 +46,7 @@ router.get('/startquiz', function (req, res) {
 
 router.get('/loadquiz', function (req, res) {
   // 'Javascript will be replaced with the student's course'
-  var result = _assessmentDatabase2.default.getQuestions('Javascript');
+  var result = _assessmentDatabase2.default.getQuestions('Git For Beginners');
   result.then(function (loadedQuestion) {
     res.render('doquiz.ejs', { questions: loadedQuestion });
   });
@@ -55,7 +55,7 @@ router.get('/loadquiz', function (req, res) {
 router.post('/showresult', function (req, res) {
   // add user name and course from session when merging
   var user = 'noordean';
-  var course = 'Javascript';
+  var course = 'Git For Beginners';
   var questions = Object.keys(req.body);
   var scores = 0;
   for (var question = 0; question < questions.length; question += 1) {
