@@ -1,10 +1,11 @@
-const startQuiz = document.getElementById('startquiz');
-const course = document.getElementById('course');
-const displayQuestion = document.getElementById('displayQuestion');
+/*const startQuiz = document.getElementById('startquiz');
+//const course = document.getElementById('course');
+//const displayQuestion = document.getElementById('displayQuestion');
 const submitButton = document.getElementById('submitquiz');
-let numberOfQuestion = 0;
+const numberOfQuestion = 3;
 let numberOfCorrectAnswers = 0;
 
+/*
 const showQuestion = (quizObject) => {
   let html = '';
   for (let option = 0; option < quizObject.length; option += 1) {
@@ -36,7 +37,15 @@ startQuiz.addEventListener('click', () => {
       });
     }
   });
-});
+});*/
+/*
+const sendResulToServer = (questionPassed, totalQuestion) => {
+  fetch('showresult', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({'score': questionPassed, 'totalQuestionNo': totalQuestion })
+  });
+};
 
 const isCorrect = (options) => {
   let status = false;
@@ -50,13 +59,14 @@ const isCorrect = (options) => {
   return status;
 };
 
-submitButton.addEventListener('click', () => {
+/*submitButton.addEventListener('click', () => {
   for (let question = 0; question < numberOfQuestion; question += 1) {
-    const options = document.getElementsByClassName(('options' + (question + 1)));
+    const options = document.getElementsByClassName((question + 1));
     if (isCorrect(options)) {
       numberOfCorrectAnswers += 1;
     }
   }
+  sendResulToServer(numberOfCorrectAnswers, numberOfQuestion);
   alert('Got ' + numberOfCorrectAnswers + ' out of ' + numberOfQuestion + ' questions' + "\nPercentage: " + Math.floor((numberOfCorrectAnswers / numberOfQuestion) * 100) + '%');
   numberOfCorrectAnswers = 0;
-});
+});*/

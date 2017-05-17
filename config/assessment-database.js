@@ -45,10 +45,10 @@ class AssessmentDatabase {
     });
   }
 
-  getCourses() {
+ /* getCourses() {
     const result = this.Question.distinct('course').exec();
     return result;
-  }
+  }*/
 
   getQuestions(studentCourse) {
     const result = this.Question.find({ course: studentCourse }).exec();

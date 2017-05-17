@@ -62,12 +62,12 @@ var AssessmentDatabase = function () {
         }
       });
     }
-  }, {
-    key: 'getCourses',
-    value: function getCourses() {
-      var result = this.Question.distinct('course').exec();
-      return result;
-    }
+
+    /* getCourses() {
+       const result = this.Question.distinct('course').exec();
+       return result;
+     }*/
+
   }, {
     key: 'getQuestions',
     value: function getQuestions(studentCourse) {

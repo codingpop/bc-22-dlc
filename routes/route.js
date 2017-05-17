@@ -4,6 +4,10 @@ import assessment from '../config/assessment-database';
 const router = express.Router();
 
 
+router.get('/', (req,res) => {
+  // get username from session to replace noordean
+  res.render('studentsdashboard.ejs', { user: 'noordean', lastResult: '' });
+})
 router.get('/addquestion', (req, res) => {
   res.render('addquestion.ejs');
 });
@@ -20,18 +24,30 @@ router.post('/addquestion', (req, res) => {
 });
 
 router.get('/startquiz', (req, res) => {
-  const result = assessment.getCourses();
-  result.then((course) => {
-    res.render('startquiz.ejs', { courses: course });
+  res.render('startquiz.ejs');
+});
+
+router.get('/loadquiz', (req, res) => {
+  // 'Javascript will be replaced with latest registered course from db'
+  const result = assessment.getQuestions('Javascript');
+  result.then((loadedQuestion) => {
+    res.render('doquiz.ejs', { questions: loadedQuestion });
   });
 });
 
-router.post('/loadquiz', (req, res) => {
-  const course = req.body.course;
-  const result = assessment.getQuestions(course);
-  result.then((questions) => {
-    res.send(questions);
-  });
+router.post('/showresult', (req, res) => {
+    // add user name from session when merging
+  const questions = Object.keys(req.body);
+  let scores = 0;
+  for (let question = 0; question < questions.length; question += 1) {
+    if (Array.isArray(req.body[questions[question]])) {
+      if (req.body[questions[question]][0] === req.body[questions[question]][1]) {
+        scores += 1;
+      }
+    }
+  }
+  res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
 });
+
 
 export default router;

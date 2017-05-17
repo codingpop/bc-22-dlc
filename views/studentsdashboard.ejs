@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+
+</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1"/>
+</head>
+<body>
+	<div class="container">
+		<h1 id="header">DLC</h1>
+        
+        <div><%=user%></div>
+        <div><a href="/startquiz">Take assessemnt</a></div>
+        <% if (lastResult) {%>
+          <div>Last Result: <%=lastResult%></div>
+        <%} else {%>
+          <div>Last Result: No result yet</div>
+        <%}%>
+        <div><a href="#">View all previous results</a></div>
+	</div>
+
+</body>
+</html>

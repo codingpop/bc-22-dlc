@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1"/>
+
+</head>
+<body>
+	<div class="container">
+		<h1 id="header">DLC</h1>
+		<p><a href="#">Dashboard</p>
+		<h4>Result:</h4>
+		<ul>
+			<li>Total no of questions: <%=totalQuestionNo%></li>
+			<li>No of correct answers: <%=score%></li>
+			<li>No of missed questions: <%=(totalQuestionNo-score)%></li>
+			<li>Percentage: <%=Math.floor((score/totalQuestionNo)*100)%>%</li>
+		</ul>
+	</div>
+</body>
+</html>
