@@ -11,17 +11,17 @@ const instructorSchema = mongoose.Schema({
     type: 'string'
   },
   address: [{
-    street_address: {type: 'string'},
-    city: {type: 'string'},
-    state: {type: 'string'},
-    zip: {type: 'string'}
+    street_address: { type: 'string' },
+    city: { type: 'string' },
+    state: { type: 'string' },
+    zip: { type: 'string' }
   }],
   email: {
     type: 'string'
   },
-  classes: [{
-    class_id: { type: [ mongoose.Schema.Types.ObjectId]},
-    class_title: {type: 'string'}
+  courses: [{
+    course_id: { type: [mongoose.Schema.Types.ObjectId] },
+    course_title: { type: 'string' }
   }]
 });
 

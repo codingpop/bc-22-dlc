@@ -14,7 +14,14 @@
 }
 #content-categories {
   margin-top: 70px;
+  padding-right: 20px; 
 }
+
+.side-nav h5 {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
 .section-header, .section-footer {
   padding-left: 300px;
 }
@@ -49,6 +56,7 @@
 }
 .img {
   margin-top: 40px;
+}
 
 #profile-pic {
   height: 100px;
@@ -65,4 +73,12 @@
 }
 .about {
   padding-bottom: 25px;
+<<<<<<< HEAD
+=======
+}
+.about-section {
+  font-size: 17px;
+  font-family: Helvetica;
+  text-align: justify;
+>>>>>>> 09b98bc0e7d61b79273042d7f6ba797b6e31a365
 }

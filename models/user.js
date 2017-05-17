@@ -21,7 +21,6 @@ const userSchema = mongoose.Schema({
     type: 'string',
     bcrypt: true
   },
-
 });
 
 const User = module.exports = mongoose.model('User', userSchema);
@@ -29,12 +28,13 @@ const User = module.exports = mongoose.model('User', userSchema);
 // fetch user
 module.exports.getUserById = (id, callback) => {
   User.findById(id, callback);
-}
+};
 
 module.exports.getUserByEmail = (email, callback) => {
   const query = { email };
   User.findOne(query, callback);
-}
+};
+
 
 // compare password
 module.exports.comparePassword = ((candidatePassword, hash, callback) => {
@@ -52,3 +52,4 @@ module.exports.createUser = ((newUser, callback) => {
     newUser.save(callback);
   });
 });
+
