@@ -4,10 +4,15 @@ import assessment from '../config/assessment-database';
 const router = express.Router();
 
 
-router.get('/', (req,res) => {
-  // get username from session to replace noordean
-  res.render('studentsdashboard.ejs', { user: 'noordean', lastResult: '' });
-})
+router.get('/', (req, res) => {
+  const username = 'noordean';
+  const results = assessment.getResult(username);
+  results.then((result) => {
+   // get username from session to replace noordean
+    res.render('studentsdashboard.ejs', { user: username, lastResult: result[0].score });
+  });
+});
+
 router.get('/addquestion', (req, res) => {
   res.render('addquestion.ejs');
 });
@@ -28,7 +33,7 @@ router.get('/startquiz', (req, res) => {
 });
 
 router.get('/loadquiz', (req, res) => {
-  // 'Javascript will be replaced with latest registered course from db'
+  // 'Javascript will be replaced with the student's course'
   const result = assessment.getQuestions('Javascript');
   result.then((loadedQuestion) => {
     res.render('doquiz.ejs', { questions: loadedQuestion });
@@ -36,7 +41,9 @@ router.get('/loadquiz', (req, res) => {
 });
 
 router.post('/showresult', (req, res) => {
-    // add user name from session when merging
+    // add user name and course from session when merging
+  const user = 'noordean';
+  const course = 'Javascript';
   const questions = Object.keys(req.body);
   let scores = 0;
   for (let question = 0; question < questions.length; question += 1) {
@@ -46,8 +53,18 @@ router.post('/showresult', (req, res) => {
       }
     }
   }
+
+  // save the result to database;
+  assessment.saveResult(user, scores, course);
   res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
 });
 
+router.get('/showallresult', (req, res) => {
+  const username = 'noordean';
+  const results = assessment.getResult(username);
+  results.then((resultt) => {
+    res.render('showallresult.ejs', { result: resultt });
+  });
+});
 
 export default router;

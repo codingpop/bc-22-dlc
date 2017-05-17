@@ -13,11 +13,11 @@
         <div><%=user%></div>
         <div><a href="/startquiz">Take assessemnt</a></div>
         <% if (lastResult) {%>
-          <div>Last Result: <%=lastResult%></div>
+          <div>Last Result: <%=Math.floor((lastResult/10)*100)%>%</div>
         <%} else {%>
           <div>Last Result: No result yet</div>
         <%}%>
-        <div><a href="#">View all previous results</a></div>
+        <div><a href="/showallresult">View all previous results</a></div>
 	</div>
 
 </body>

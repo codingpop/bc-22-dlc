@@ -42,6 +42,14 @@ var AssessmentDatabase = function () {
       course: String
     });
     this.Question = _mongoose2.default.model('Questions', questionSchema);
+
+    var resultSchema = new _mongoose2.default.Schema({
+      user: String,
+      score: String,
+      course: String,
+      date: { type: String, default: Date.now() }
+    });
+    this.result = _mongoose2.default.model('Results', resultSchema);
   }
 
   _createClass(AssessmentDatabase, [{
@@ -72,6 +80,26 @@ var AssessmentDatabase = function () {
     key: 'getQuestions',
     value: function getQuestions(studentCourse) {
       var result = this.Question.find({ course: studentCourse }).exec();
+      return result;
+    }
+  }, {
+    key: 'saveResult',
+    value: function saveResult(username, stdScore, theCourse) {
+      var resultToPut = new this.result({
+        user: username,
+        score: stdScore,
+        course: theCourse
+      });
+      resultToPut.save(function (err) {
+        if (err) {
+          throw new Error(err);
+        }
+      });
+    }
+  }, {
+    key: 'getResult',
+    value: function getResult(username) {
+      var result = this.result.find({ user: username }).sort({ _id: -1 }).exec();
       return result;
     }
   }]);

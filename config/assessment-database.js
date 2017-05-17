@@ -26,6 +26,14 @@ class AssessmentDatabase {
       course: String,
     });
     this.Question = mongoose.model('Questions', questionSchema);
+
+    const resultSchema = new mongoose.Schema({
+      user: String,
+      score: String,
+      course: String,
+      date: { type: String, default: Date.now() }
+    });
+    this.result = mongoose.model('Results', resultSchema);
   }
 
   saveQuestion(theQuestion, optionA, optionB, optionC, optionD, rightAnswer, courseOfStudy) {
@@ -52,6 +60,24 @@ class AssessmentDatabase {
 
   getQuestions(studentCourse) {
     const result = this.Question.find({ course: studentCourse }).exec();
+    return result;
+  }
+
+  saveResult(username, stdScore, theCourse) {
+    const resultToPut = new this.result({
+      user: username,
+      score: stdScore,
+      course: theCourse
+    });
+    resultToPut.save((err) => {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+  }
+
+  getResult(username) {
+    const result = this.result.find({ user: username }).sort({ _id: -1 }).exec();
     return result;
   }
 }
