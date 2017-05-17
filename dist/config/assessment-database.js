@@ -52,6 +52,19 @@ var AssessmentDatabase = function () {
     this.result = _mongoose2.default.model('Results', resultSchema);
   }
 
+  /**
+   * @description saves questions into database
+   * @param {string} theQuestion
+   *  @param {string} optionA
+   *  @param {string} optionB
+   *  @param {string} optionC
+   *  @param {string} optionD
+   *  @param {string} rightAnswer
+   *  @param {string} courseOfStudy
+   * @return {String} nothing
+   */
+
+
   _createClass(AssessmentDatabase, [{
     key: 'saveQuestion',
     value: function saveQuestion(theQuestion, optionA, optionB, optionC, optionD, rightAnswer, courseOfStudy) {
@@ -76,12 +89,27 @@ var AssessmentDatabase = function () {
        return result;
      }*/
 
+    /**
+     * @description: gets 10 questions for quiz
+     * @param {string} studentCourse
+     *  @return {Object} result
+     */
+
   }, {
     key: 'getQuestions',
     value: function getQuestions(studentCourse) {
       var result = this.Question.find({ course: studentCourse }).limit(10).exec();
       return result;
     }
+
+    /**
+     * @description: saves result of the assessment
+     * @param {string} username
+     * @param {string} stdScore
+     * @param {string} theCourse
+     *  @return {String} nothing
+     */
+
   }, {
     key: 'saveResult',
     value: function saveResult(username, stdScore, theCourse) {
@@ -96,6 +124,13 @@ var AssessmentDatabase = function () {
         }
       });
     }
+
+    /**
+     * @description: gets assessment results
+     * @param {string} username
+     *  @return {Object} result
+     */
+
   }, {
     key: 'getResult',
     value: function getResult(username) {

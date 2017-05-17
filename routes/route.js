@@ -35,7 +35,7 @@ router.get('/startquiz', (req, res) => {
 
 router.get('/loadquiz', (req, res) => {
   // 'Javascript will be replaced with the student's course'
-  const result = assessment.getQuestions('Git For Beginners');
+  const result = assessment.getQuestions("Let's Learn ES6");
   result.then((loadedQuestion) => {
     res.render('doquiz.ejs', { questions: loadedQuestion });
   });
@@ -44,7 +44,7 @@ router.get('/loadquiz', (req, res) => {
 router.post('/showresult', (req, res) => {
     // add user name and course from session when merging
   const user = 'noordean';
-  const course = 'Git For Beginners';
+  const course = "Let's Learn ES6";
   const questions = Object.keys(req.body);
   let scores = 0;
   for (let question = 0; question < questions.length; question += 1) {
