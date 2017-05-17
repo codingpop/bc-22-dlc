@@ -1,119 +1,143 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title> Freelearners | Forum </title>
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
-    <style>
-      .search {display: inline;}
-    </style>
-  </head>
-  <body>
-    <div class="navbar-fixed">
-      <nav class="black">
-          <div class="nav-wrapper">
-              <ul class="right" style="height:10px;">
-                  <li>Resources</li>
-                  <li>PHP</li>
-                  <li>Reactjs</li>
-              </ul>
-          </div>
-      </nav>
-    </div>
 
-    <div class="row">
-        <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
-        <!-- Question card -->
-        <div class="col s6 card">
-          <!-- Question holder -->
-          <div id="questionHolder">
-            <% questions.forEach(function(question) { %>
-              <div id="question" class="card" style="padding:10px;">
-                  <a href="/question/<%=question._id%>" target="_blank">
-                    <h5>
-                      <%=question.question%>
-                    </h5>
-                  </a>
-                  <!--<i>Edit</i>-->
-                  <h6>
-                    <i style="font-size:11px; text-transform:capitalize;"><%=question.date%></i>
-                  </h6>
-              </div>
-              <div id="response">
-                <button class="chip btn grey" style="font-size:11px;">Answers <i> <%= question.answer %></i></button>
-              </div>
-               <!--Response -->
-            <% }); %>
-            <!-- Question-->
-          </div>
-          <!-- Question holder -->
-          <!--pagination holder -->
-          <ul class="pagination" id="paginateHolder">
-        </ul>
+<head>
+  <title> fastlearners | Community </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body>
+  <ul id="slide-out" class="side-nav fixed sidenav-color">
+    <li>
+      <div class="userView">
+        <div class="background">
+          <img src="/images/cover.jpg" id="cover">
         </div>
-        <!-- Question card -->
-        <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
-        <!-- To be Fixed -->
-        <div class="col s3 card ">
-          <h4>User Activities</h4>
-          <div>
-            <div class="input-field col s12">
-               <input placeholder="Search For a Question" id="first_name" type="text" class="validate" onkeyup="search(this.value)">
+        <!-- background -->
+        <img class="circle" src="/images/flashindex-logo.jpg" id="logo-picture">
+        <span class="white-text name">fastLearners</span>
+        <span class="white-text email">The fastest way to own your learning</span>
+        <span class="white-text name">Welcome <%= user %></span>
+      </div>
+      <!-- userView -->
+    </li>
+    <li><a class="waves-effect white-text" href="/dashboard"><i class="material-icons white-text">view_headline</i>DASHOARD</a></li>
+    <li><a class="waves-effect white-text" href="/profile"><i class="material-icons white-text">perm_identity</i>PROFILE</a></li>
+    <li><a class="waves-effect white-text" href="/forum"><i class="material-icons white-text">forum</i>COMMUNITY</a></li>
+    <li><a class="waves-effect white-text" href="/startquiz"><i class="material-icons white-text">library_books</i>ASSESSMENTS</a></li>
+  </ul>
+  <!-- side-nav fixed sidenav-color -->
+
+  <header class="section-header">
+      <nav>
+        <div class="nav-wrapper grey darken-3">
+          <a href="/dashboard" class="brand-logo" id="brand-size">
+            <span class="orange-text text-accent-1">fast</span>
+            <span class="brown-text text-lighten-2">Learners</span>
+          </a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/logout">Log Out</a></li>
+          </ul>
+        </div> <!-- nav-wrapper -->
+      </nav>
+    </header><!-- section-header -->
+
+  <div class="content">
+    <div class="row">
+      <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
+      <!-- Question card -->
+      <div class="col s6 card">
+        <!-- Question holder -->
+        <div id="questionHolder">
+          <% questions.forEach(function(question) { %>
+            <div id="question" class="card" style="padding:10px;">
+              <a href="/question/<%=question._id%>" target="_blank">
+                <h5>
+                  <%=question.question%>
+                </h5>
+              </a>
+              <!--<i>Edit</i>-->
+              <h6>
+                <i style="font-size:11px; text-transform:capitalize;"><%=question.date%></i>
+              </h6>
             </div>
+            <div id="response">
+              <button class="chip btn grey" style="font-size:11px;">Answers <i> <%= question.answer %></i></button>
+            </div>
+            <!--Response -->
+            <% }); %>
+              <!-- Question-->
+        </div>
+        <!-- Question holder -->
+        <!--pagination holder -->
+        <ul class="pagination" id="paginateHolder">
+        </ul>
+      </div>
+      <!-- Question card -->
+      <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
+      <!-- To be Fixed -->
+      <div class="col s3 card ">
+        <h4>User Activities</h4>
+        <div>
+          <div class="input-field col s12">
+            <input placeholder="Search For a Question" id="first_name" type="text" class="validate" onkeyup="search(this.value)">
           </div>
-          <div >
-            <ul>
-                <li id='searchResultDisplay'></li>
-            </ul>
-            <p>Search Questions By Courses</p>
-            <ul>
-              <li class="search"><a href="/question/javascript" target="_blank"> JavaScript </a></li>
-              <li class="search"><a href="/question/php" target="_blank"> PHP </a></li>
-              <li class="search"><a href="/question/java" target="_blank"> Java </a></li>
-              <li class="search"><a href="/question/mongoDB" target="_blank"> MongoDB </a></li>
-              <li class="search"><a href="/question/node" target="_blank"> Node </a></li>
-              <li class="search"><a href="/question/express" target="_blank"> Express </a></li>
-            </ul>
-          </div>
-          <div class="col s12">
+        </div>
+        <div>
+          <ul>
+            <li id='searchResultDisplay'></li>
+          </ul>
+          <p>Search Questions By Courses</p>
+          <ul>
+            <li class="search"><a href="/question/javascript" target="_blank"> JavaScript </a></li>
+            <li class="search"><a href="/question/php" target="_blank"> PHP </a></li>
+            <li class="search"><a href="/question/java" target="_blank"> Java </a></li>
+            <li class="search"><a href="/question/mongoDB" target="_blank"> MongoDB </a></li>
+            <li class="search"><a href="/question/node" target="_blank"> Node </a></li>
+            <li class="search"><a href="/question/express" target="_blank"> Express </a></li>
+          </ul>
+        </div>
+        <div class="col s12">
           <form action="" id="questionform" method="post" enctype="multipart/form-data">
-          <h5 class="center-align">Add a Question</h5>
-          <span id="msgdisplay"></span>
-          <div class="row">
-            <div class="input-field col s12">
-              <textarea class="materialize-textarea" id="yourquestion" required maxlength="200" name="question"></textarea>
-              <label for="textarea1">Enter your Question.</label>
-            </div>
-            <div>
-              <span><i>200 Characters Allowed.</i></span>
-            </div>
-          <p>
-            <input type="checkbox" id="test5" name="notify" />
-            <label for="test5">Notify me by Email when Answered</label>
-          </p>
-          <label>Add a Tag</label>
-          <select class="browser-default" name="tag" id="tag">
+            <h5 class="center-align">Add a Question</h5>
+            <span id="msgdisplay"></span>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea class="materialize-textarea" id="yourquestion" required maxlength="200" name="question"></textarea>
+                <label for="textarea1">Enter your Question.</label>
+              </div>
+              <div>
+                <span><i>200 Characters Allowed.</i></span>
+              </div>
+              <p>
+                <input type="checkbox" id="test5" name="notify" />
+                <label for="test5">Notify me by Email when Answered</label>
+              </p>
+              <label>Add a Tag</label>
+              <select class="browser-default" name="tag" id="tag">
             <option value = "0" selected>Choose a tag</option>
             <option >JavaScript</option>
             <option >Node</option>
             <option >Mongo DB</option>
           </select>
-          <div>
+              <div>
 
-          </div>
-          <button class="btn waves-effect waves-light grey" type="button" name="action" onclick="addQuestion()" >Submit
+              </div>
+              <button class="btn waves-effect waves-light grey" type="button" name="action" onclick="addQuestion()">Submit
               <i class="material-icons right">send</i>
           </button>
-          </div>
-      </form>
+            </div>
+          </form>
         </div>
       </div>
       <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
       <!-- Add A Question -->
-  <script src="js/validate.js" type="text/javascript"></script>
-  <script>
-  // sends a new question to the server
+    </div>
+    <script src="js/validate.js" type="text/javascript"></script>
+    <script>
+      // sends a new question to the server
       function addQuestion() {
         const yourQuestion = $('#yourquestion').val();
         const notify = $('#test5').val();
@@ -121,39 +145,40 @@
         if ((tag == '0') || (yourQuestion.length === 0)) {
           $('#msgdisplay').text('Write a Question and Select a Tag Please!!!');
         } else {
-          $.post('/addQuestion',{question:yourQuestion, notify: notify, tag: tag}, function(response){
-          $('#msgdisplay').text(response);
-          location.reload();
-        });
+          $.post('/addQuestion', { question: yourQuestion, notify: notify, tag: tag }, function (response) {
+            $('#msgdisplay').text(response);
+            location.reload();
+          });
+        }
       }
-    }
-// Searches the database for questions
-      function search(terms){
-        if(terms.length > 5){
-          $.post('/search',{term: terms}, function(response){
+      // Searches the database for questions
+      function search(terms) {
+        if (terms.length > 5) {
+          $.post('/search', { term: terms }, function (response) {
             let result = '';
-            response.forEach(function(respons){
-            result += "<li><a href='/question/"+respons._id+"' target='_blank'>"+respons.question+"</a></li>";
+            response.forEach(function (respons) {
+              result += "<li><a href='/question/" + respons._id + "' target='_blank'>" + respons.question + "</a></li>";
             });
             $('#searchResultDisplay').html(result);
           })
+        }
       }
-      }
-// Paginates the Displayed Question
-      function paginate(){
-        const totalRecord = <%=totalRecord %>;
-        const possiblePages = Math.ceil(totalRecord/10);
+      // Paginates the Displayed Question
+      function paginate() {
+        const totalRecord = <%= totalRecord %>;
+        const possiblePages = Math.ceil(totalRecord / 10);
         let result = '';
         let toSkip = 0;
-        for(let b = 1; b <= possiblePages; b+=1){
-          result += "<li><a href='/"+toSkip+"' target='_blank'>"+b+"</a></li>";
-          toSkip +=10
+        for (let b = 1; b <= possiblePages; b += 1) {
+          result += "<li><a href='/" + toSkip + "' target='_blank'>" + b + "</a></li>";
+          toSkip += 10
         }
         document.getElementById('paginateHolder').innerHTML = result;
       }
       window.onready = paginate();
-  </script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
-   </body>
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+</body>
+
 </html>

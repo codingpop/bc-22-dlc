@@ -23,8 +23,6 @@ var _route2 = _interopRequireDefault(_route);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
-
 var app = (0, _express2.default)();
 
 /**

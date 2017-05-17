@@ -292,7 +292,7 @@ router.get('/forum', (req, res) => {
           throw err;
         } else {
           const totalRecords = totalQuestion.length;
-          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords });
+          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords, user: sess.user });
         }
       });
     });

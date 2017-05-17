@@ -63,6 +63,9 @@
 .user-courses {
   padding-top: 5px;
 }
+.search {
+  display: inline;
+}
 .about {
   padding-bottom: 25px;
   background-image: url(/images/space.png);
