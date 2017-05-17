@@ -7,11 +7,8 @@ import flash from 'connect-flash';
 import session from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-<<<<<<< HEAD
-=======
 import cookieParser from 'cookie-parser';
 import mongo from 'mongodb';
->>>>>>> 86589d7c7c950c93a4baa669826920cc1fd9023d
 import mongoose from 'mongoose';
 import index from './routes/index';
 import signup from './routes/signup';
@@ -25,7 +22,7 @@ const localStrategy = passportLocal.Strategy;
 dotenv.config();
 
 const app = express();
-
+export default app;
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -97,15 +94,11 @@ app.use((err, req, res) =>{
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-<<<<<<< HEAD
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
   console.log('server now running at', port);
-=======
   // render the error page
   res.status(err.status || 500);
   res.render('error');
->>>>>>> 86589d7c7c950c93a4baa669826920cc1fd9023d
 });
-
-module.exports = app;

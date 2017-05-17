@@ -24,7 +24,7 @@
     </li>
     <h5 class="white-text"><%= item.title.toUpperCase() %></h5>
     <% item.chapters.forEach((chapter) => { %>
-      <li><a class="waves-effect white-text" href="#!"><%- chapter.name %></a></li>
+      <li><a class="waves-effect white-text" href="/watch/<%= %>/<%= %>"><%- chapter.name %></a></li>
     <% }) %>
   </ul>
   <!-- side-nav fixed sidenav-color -->
