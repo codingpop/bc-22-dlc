@@ -3,93 +3,24 @@
 /**
  * Module dependencies.
  */
-import http from 'http';
-// import mongoose from 'mongoose';
-
-import app from './app';
+import express from 'express';
+import validator from 'express-validator';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import router from './routes/route';
 
 // mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
-const debug = require('debug')('desktop:server');
 
-/**
- * Normalize a port into a number, string, or false.
- */
+const app = express();
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(validator());
+app.use(session({ secret: 'ssshhhhh' }));
+app.use(bodyParser.json());
 
-function normalizePort(val) {
-  const port = parseInt(val, 10);
+app.listen(process.env.PORT || 3000, () => {
+  console.log('app runs');
+});
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
-
-/**
- * Get port from environment and store in Express.
- */
-
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-const server = http.createServer(app);
-
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
-
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+app.use('/', router);
