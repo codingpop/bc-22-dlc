@@ -1,1 +1,1 @@
-web: gulp transpile
+web: node node_modules/gulp/bin/gulp build
