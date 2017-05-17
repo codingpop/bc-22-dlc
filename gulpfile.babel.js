@@ -5,9 +5,14 @@ import istanbul from 'gulp-babel-istanbul';
 import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
 
-gulp.task('transpile', () =>
+gulp.task('transpile', ['transfer'], () =>
 gulp.src(['./**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
 .pipe(babel()).pipe(gulp.dest('dist')));
+
+gulp.task('transfer', () => {
+  gulp.src('./**/*.ejs, ./**/*.css, ./**/*.jpg, ./**/*.png')
+  .pipe(gulp.dest('dist'));
+});
 
 gulp.task('run-tests', ['transpile'], () =>
 gulp.src(['tests/**.js'])
