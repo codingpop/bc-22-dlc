@@ -1,12 +1,10 @@
 /* eslint linebreak-style: ["error", "windows"]*/
 const express = require('express');
 const mongoose = require('mongoose');
-const multer = require('multer');
 const bodyParser = require('body-parser');
 
 const app = express();
 app.set('view engine', 'ejs');
-const upload = multer({ dest: 'uploads/' });
 mongoose.connect('mongodb://noordean:ibrahim5327@ds161190.mlab.com:61190/nurudb');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,8 +42,35 @@ const question = new Schema({
 },
   { collection: 'Forum' }
 );
+
 const Question = mongoose.model('Question', question);
 
+const answers = new Schema({
+  questionid: {
+    type: String, required: true
+  },
+  idOfPoster: {
+    type: Number, required: true
+  },
+  value: {
+    type: String, required: true
+  },
+  date: {
+    type: Date, required: true
+  },
+  votes: {
+    numberofvotes: {
+      type: Number, required: false
+    },
+    voters: {
+      type: Array, required: false
+    }
+  }
+},
+  { collection: 'Answers' }
+);
+
+const Answer = mongoose.model('Answer', answers);
 app.get('/', (req, res) => {
   Question.find({}).sort({ date: -1 }).limit(10).exec((err, questions) => {
     res.render('pages/forum.ejs', { questions: questions });
@@ -53,16 +78,15 @@ app.get('/', (req, res) => {
 });
 
 app.post('/addQuestion', (req, res) => {
-  const question = req.body.question;
-  const notify = req.body.notify;
-  const tag =  req.body.tag;
-  console.log('recieving Questions here');
+  const questionToAdd = req.body.question;
+  const notifyToAdd = req.body.notify;
+  const tagToAdd = req.body.tag;
   const newQuestion = new Question({
-    question: question,
+    question: questionToAdd,
     idOfPoster: 1,
     date: Date.now(),
-    tag: tag,
-    notify: notify
+    tag: tagToAdd,
+    notify: notifyToAdd
   });
   newQuestion.save((err) => {
     if (err) {
@@ -74,30 +98,55 @@ app.post('/addQuestion', (req, res) => {
 
 app.get('/question/:id', (req, res) => {
   const id = req.params.id;
-  Question.findById(id, (err, uniqueQuestion) =>{
+  if (id.length >= 20) {
+    Question.findById(id, (err, uniqueQuestion) => {
+      if (err) {
+        throw err;
+      }
+      Answer.find({ questionid: id }, (err, uniqueAnswers) => {
+        res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers });
+      });
+    });
+  } else {
+    Question.find({ tag: id }, (err, questions) => {
+      if (err) {
+        throw err;
+      }
+      res.render('pages/forum.ejs', { questions: questions });
+    });
+  }
+});
+
+app.post('/addAnswer', (req, res) => {
+  const answer = req.body.answer;
+  const questionId = req.body.questionid;
+  const userId = 1;   // to change to a real userId
+  const newAnswer = new Answer({
+    questionid: questionId,
+    idOfPoster: userId,
+    value: answer,
+    date: Date.now()
+  });
+  newAnswer.save((err) => {
     if (err) {
-      throw err;
+      console.log(err);
+      res.send(err);
+    } else {
+      res.send('Added');
     }
-    res.render('pages/question.ejs', { question: uniqueQuestion });
   });
 });
 
-app.post('/addAnswer', (req, res) =>{
-  const answer = req.body.answer;
-  const questionId = req.body.questionid;
-  // to change to a real userId
-  const userId = 1;
-  const answerObject = {
-    userId: [answer, ]
-  }
-  res.send('We are recieving answers here');
-});
-
 app.post('/search', (req, res) => {
-  const searchTerm = req.body.terms;
-  Question.findOne({ name: new RegExp('^'+searchTerm+'$', "i") }, (err, doc) => {
-    res.send(searchTerm);
-});
+  const searchTerm = req.body.term;
+  console.log(searchTerm);
+  Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec((err, doc) => {
+    if (err) {
+      throw err;
+    }
+    console.log(doc);
+    res.send(doc);
+  });
 });
 
 app.listen(8000);

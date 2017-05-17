@@ -5,6 +5,9 @@
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+    <style>
+      .search {display: inline;}
+    </style>
   </head>
   <body>
     <div class="navbar-fixed">
@@ -78,8 +81,17 @@
             </div>
           </div>
           <div >
-            <ul id='searchResultDisplay'>
-
+            <ul>
+                <li id='searchResultDisplay'></li>
+            </ul>
+            <p>Search Questions By Courses</p>
+            <ul>
+              <li class="search"><a href="/question/javascript" target="_blank"> JavaScript </a></li>
+              <li class="search"><a href="/question/php" target="_blank"> PHP </a></li>
+              <li class="search"><a href="/question/java" target="_blank"> Java </a></li>
+              <li class="search"><a href="/question/mongoDB" target="_blank"> MongoDB </a></li>
+              <li class="search"><a href="/question/node" target="_blank"> Node </a></li>
+              <li class="search"><a href="/question/express" target="_blank"> Express </a></li>
             </ul>
           </div>
           <div class="col s12">
@@ -138,11 +150,14 @@
         });
       }
       function search(terms){
-        if(term.length > 10){
+        if(terms.length > 5){
           $.post('/search',{term: terms}, function(response){
-            $('#searchResultDisplay').html(response);
+            let result = '';
+            response.forEach(function(respons){
+              result += "<li><a href='/question/"+respons._id+"' target='_blank'>"+respons.question+"</a></li>";
+            });
+            $('#searchResultDisplay').html(result);
           })
-        alert(term);
       }
       }
   </script>

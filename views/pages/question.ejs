@@ -41,13 +41,11 @@
               </div>
               <div>
                 Answers for this Question
-                <h6>
-                  How can I install Mongoose?
-                  How can I install Mongoose?
-                  How can I install Mongoose?
-                </h6>
-                <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" onclick="makeAVote()">Vote <i> <%=question.votes.voters.length%></i></button>
-                <h6 class="right-align">Adedayo <i style="font-size:10px;">12/12/2017</i></h6>
+                <% uniqueAnswer.forEach(function(answer) { %>
+                    <h6><%=answer.value%></h6>
+                    <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">Vote <i> <%=question.votes.voters.length%></i></button>
+                    <h6 class="right-align"><%=answer.idOfPoster %><i style="font-size:10px;"><%=answer.date %></i></h6>
+                  <% }); %>
               </div>
                <!--Response -->
             <!-- Question-->
@@ -74,6 +72,7 @@
           <form action="#">
           <h4 class="center-align">Add your Answer</h4>
           <div class="row">
+            <span id="msgdisplay"></span>
             <div class="input-field col s12">
               <textarea id="answer" class="materialize-textarea" required maxlength="200" name="answer"></textarea>
               <label for="textarea1">Enter your Question.</label>
@@ -95,16 +94,13 @@
       function addAnswer() {
         const questionId =$('#questionid').val();
         const answer =$('#answer').val();
-        alert(questionId);
-        alert(answer);
         $.post('/addAnswer',{answer:answer, questionid: questionId}, function(response){
-          alert(response);
-          // $('#msgdisplay').text(response);
+           $('#msgdisplay').text(response);
         });
       }
 
-      function makeAVote() {
-        alert('voter');
+      function makeAVote(aa) {
+        alert(aa);
       }
 
       function addViews() {
