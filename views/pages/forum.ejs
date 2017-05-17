@@ -59,14 +59,8 @@
             <!-- Question-->
           </div>
           <!-- Question holder -->
-          <ul class="pagination">
-            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="#!">1</a></li>
-            <li class="waves-effect"><a href="#!">2</a></li>
-            <li class="waves-effect"><a href="#!">3</a></li>
-            <li class="waves-effect"><a href="#!">4</a></li>
-            <li class="waves-effect"><a href="#!">5</a></li>
-            <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+          <!--pagination holder -->
+          <ul class="pagination" id="paginateHolder">
         </ul>
         </div>
         <!-- Question card -->
@@ -122,10 +116,10 @@
           </p>
           <label>Add a Tag</label>
           <select class="browser-default" name="tag" id="tag">
-            <option value="" disabled selected>Choose your option</option>
-            <option value="1">JavaScript</option>
-            <option value="2">Node</option>
-            <option value="3">Mongo DB</option>
+            <option value = "0" selected>Choose a tag</option>
+            <option >JavaScript</option>
+            <option >Node</option>
+            <option >Mongo DB</option>
           </select>
           <div>
 
@@ -145,9 +139,14 @@
         const yourQuestion = $('#yourquestion').val();
         const notify = $('#test5').val();
         const tag = $('#tag').val();
+        if ((tag == '0') || (yourQuestion.length === 0)) {
+          $('#msgdisplay').text('Write a Question and Select a Tag Please!!!');
+        } else {
         $.post('/addQuestion',{question:yourQuestion, notify: notify, tag: tag}, function(response){
           $('#msgdisplay').text(response);
+          location.reload();
         });
+      }
       }
       function search(terms){
         if(terms.length > 5){
@@ -160,6 +159,19 @@
           })
       }
       }
+
+      function paginate(){
+        const totalRecord = <%=totalRecord %>;
+        const possiblePages = Math.ceil(totalRecord/10);
+        let result = '';
+        let toSkip = 0;
+        for(let b = 1; b <= possiblePages; b+=1){
+          result += "<li><a href='/"+toSkip+"' target='_blank'>"+b+"</a></li>";
+          toSkip +=10
+        }
+        document.getElementById('paginateHolder').innerHTML = result;
+      }
+      window.onready = paginate();
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>

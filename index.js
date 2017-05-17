@@ -58,13 +58,8 @@ const answers = new Schema({
   date: {
     type: Date, required: true
   },
-  votes: {
-    numberofvotes: {
-      type: Number, required: false
-    },
-    voters: {
-      type: Array, required: false
-    }
+  voters: {
+    type: Array, required: false
   }
 },
   { collection: 'Answers' }
@@ -73,7 +68,14 @@ const answers = new Schema({
 const Answer = mongoose.model('Answer', answers);
 app.get('/', (req, res) => {
   Question.find({}).sort({ date: -1 }).limit(10).exec((err, questions) => {
-    res.render('pages/forum.ejs', { questions: questions });
+    Question.find({}).exec((err, totalQuestion) => {
+      if (err) {
+        throw err;
+      } else {
+        const totalRecords = totalQuestion.length;
+        res.render('pages/forum.ejs', { questions: questions, totalRecord: totalRecords });
+      }
+    });
   });
 });
 
@@ -109,10 +111,18 @@ app.get('/question/:id', (req, res) => {
     });
   } else {
     Question.find({ tag: id }, (err, questions) => {
+      const totalRecords = questions.length;
       if (err) {
         throw err;
       }
-      res.render('pages/forum.ejs', { questions: questions });
+      console.log(questions.length);
+      if (questions.length === 0) {
+        console.log('empty');
+        res.render('pages/forum404.ejs', { questions: questions });
+      } else {
+        console.log('here');
+        res.render('pages/forum.ejs', { questions: questions, totalRecord: totalRecords });
+      }
     });
   }
 });
@@ -147,6 +157,27 @@ app.post('/search', (req, res) => {
     console.log(doc);
     res.send(doc);
   });
+});
+
+app.post('/addvote', (req, res) => {
+  const userId = 1;
+  const answerId = req.body.answerid;
+  Answer.findById(answerId, (err, answer) => {
+    const voters = answer.voters;
+    if (voters.indexOf(userId) < 0) {
+      voters.push(userId);
+      answer.voters = voters;
+      answer.save();
+      res.send('Done');
+    } else {
+      res.send('You have voted already');
+    }
+  });
+});
+
+app.post('/addviews', (req, res) => {
+  console.log('We register here');
+  res.send('we register views here');
 });
 
 app.listen(8000);

@@ -10,10 +10,9 @@
     <div class="navbar-fixed">
       <nav class="black">
           <div class="nav-wrapper">
-              <ul class="right" style="height:10px;">
-                  <li>Resources</li>
-                  <li>PHP</li>
-                  <li>Reactjs</li>
+            <!-- to be moved to the center -->
+              <ul class="center" style="height:10px;">
+                  <li><b class="center" id="centralDisplay"> Were </b></li>
               </ul>
           </div>
       </nav>
@@ -43,7 +42,8 @@
                 Answers for this Question
                 <% uniqueAnswer.forEach(function(answer) { %>
                     <h6><%=answer.value%></h6>
-                    <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">Vote <i> <%=question.votes.voters.length%></i></button>
+                    <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">
+                      Vote <i> <%=answer.voters.length%></i></button>
                     <h6 class="right-align"><%=answer.idOfPoster %><i style="font-size:10px;"><%=answer.date %></i></h6>
                   <% }); %>
               </div>
@@ -94,17 +94,29 @@
       function addAnswer() {
         const questionId =$('#questionid').val();
         const answer =$('#answer').val();
+        if (answer == ''){
+          $('#msgdisplay').text('Please Supply an Answer');
+        } else {
         $.post('/addAnswer',{answer:answer, questionid: questionId}, function(response){
            $('#msgdisplay').text(response);
+           location.reload();
+        });
+      }
+      }
+
+      function makeAVote(answerId) {
+        $.post('/addvote', {answerid: answerId}, function(response){
+           $('#centralDisplay').text(response);
+           location.reload();
         });
       }
 
-      function makeAVote(aa) {
-        alert(aa);
-      }
-
       function addViews() {
-        // alert('Views');
+        alert('views');
+        $.post('/addviews', {} function(response){
+          alert(response);
+           //$('#msgdisplay').text(response);
+        });
       }
     window.onload = addViews();
   </script>
