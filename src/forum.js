@@ -2,32 +2,6 @@
 /**
  *
  */
-class Forum {
-
-  addQuestion(data, textData) {
-    const question = {
-      question: textData.question,
-      idOfPoster: textData.user,
-      date: Date.now(),
-      tag: textData.tag,
-      file: [data.files],
-      notify: textData.notify
-    };
-    return question;
-  }
-
-  saveAnswer(data, textData) {
-    const question = {
-      question: textData.question,
-      idOfPoster: textData.user,
-      date: Date.now(),
-      tag: textData.tag,
-      file: [data.files],
-      notify: textData.notify
-    };
-    return question;
-  }
-
-}
+class Forum {}
 
 export default Forum;

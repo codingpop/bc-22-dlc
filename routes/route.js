@@ -1,13 +1,13 @@
 /* eslint linebreak-style: ["error", "windows"]*/
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
-const app = express();
-app.set('view engine', 'ejs');
+const router = express.Router();
+router.set('view engine', 'ejs');
 mongoose.connect('mongodb://noordean:ibrahim5327@ds161190.mlab.com:61190/nurudb');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 const Schema = mongoose.Schema;
 const question = new Schema({
   question: {
@@ -42,9 +42,6 @@ const question = new Schema({
 },
   { collection: 'Forum' }
 );
-
-const Question = mongoose.model('Question', question);
-
 const answers = new Schema({
   questionid: {
     type: String, required: true
@@ -65,8 +62,10 @@ const answers = new Schema({
   { collection: 'Answers' }
 );
 
+const Question = mongoose.model('Question', question);
 const Answer = mongoose.model('Answer', answers);
-app.get('/forum', (req, res) => {
+
+router.get('/forum', (req, res) => {
   Question.find({}).sort({ date: -1 }).limit(10).exec((err, allQuestions) => {
     Question.find({}).exec((err, totalQuestion) => {
       if (err) {
@@ -79,7 +78,7 @@ app.get('/forum', (req, res) => {
   });
 });
 
-app.post('/addQuestion', (req, res) => {
+router.post('/addQuestion', (req, res) => {
   const questionToAdd = req.body.question;
   const notifyToAdd = req.body.notify;
   const tagToAdd = req.body.tag;
@@ -99,7 +98,7 @@ app.post('/addQuestion', (req, res) => {
   });
 });
 
-app.get('/question/:id', (req, res) => {
+router.get('/question/:id', (req, res) => {
   const id = req.params.id;
   if (id.length >= 20) {
     Question.findById(id, (err, uniqueQuestion) => {
@@ -125,7 +124,7 @@ app.get('/question/:id', (req, res) => {
   }
 });
 
-app.post('/addAnswer', (req, res) => {
+router.post('/addAnswer', (req, res) => {
   const answer = req.body.answer;
   const questionId = req.body.questionid;
   const userId = 1;   // to change to a real userId
@@ -144,7 +143,7 @@ app.post('/addAnswer', (req, res) => {
   });
 });
 
-app.post('/search', (req, res) => {
+router.post('/search', (req, res) => {
   const searchTerm = req.body.term;
   Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec((err, doc) => {
     if (err) {
@@ -154,7 +153,7 @@ app.post('/search', (req, res) => {
   });
 });
 
-app.post('/addvote', (req, res) => {
+router.post('/addvote', (req, res) => {
   // to change to real user
   const userId = 1;
   const answerId = req.body.answerid;
@@ -170,9 +169,3 @@ app.post('/addvote', (req, res) => {
     }
   });
 });
-
-app.post('/addviews', (req, res) => {
-  res.send('we register views here');
-});
-
-app.listen(8000);

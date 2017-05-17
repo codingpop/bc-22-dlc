@@ -41,18 +41,7 @@
                   </h6>
               </div>
               <div id="response">
-                <button class="chip btn grey" style="font-size:11px;">Views <i> <%=question.views.viewers.length%></i></button>
                 <button class="chip btn grey" style="font-size:11px;">Answers <i> <%=question.views.viewers.length%></i></button>
-              </div>
-              <!--<div>
-                Answers for this Question
-                <h6>
-                  How can I install Mongoose?
-                  How can I install Mongoose?
-                  How can I install Mongoose?
-                </h6>
-                <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" onclick="makeAVote()">Vote <i> <%=question.votes.voters.length%></i></button>
-                <h6 class="right-align">Adedayo <i style="font-size:10px;">12/12/2017</i></h6>
               </div>
                Response -->
             <% }); %>
@@ -100,16 +89,6 @@
             <div>
               <span><i>200 Characters More. you can use markdown</i></span>
             </div>
-
-            <!--<div class="file-field input-field">
-              <div class="btn grey">
-                <span>File</span>
-                <input type="file" multiple name="files">
-              </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text" placeholder="Upload one or more files">
-              </div>
-            </div>-->
           <p>
             <input type="checkbox" id="test5" name="notify" />
             <label for="test5">Notify me by Email when Answered</label>
@@ -135,6 +114,7 @@
       <!-- Add A Question -->
   <script src="js/validate.js" type="text/javascript"></script>
   <script>
+  // sends a new question to the server
       function addQuestion() {
         const yourQuestion = $('#yourquestion').val();
         const notify = $('#test5').val();
@@ -142,24 +122,25 @@
         if ((tag == '0') || (yourQuestion.length === 0)) {
           $('#msgdisplay').text('Write a Question and Select a Tag Please!!!');
         } else {
-        $.post('/addQuestion',{question:yourQuestion, notify: notify, tag: tag}, function(response){
+          $.post('/addQuestion',{question:yourQuestion, notify: notify, tag: tag}, function(response){
           $('#msgdisplay').text(response);
           location.reload();
         });
       }
-      }
+    }
+// Searches the database for questions
       function search(terms){
         if(terms.length > 5){
           $.post('/search',{term: terms}, function(response){
             let result = '';
             response.forEach(function(respons){
-              result += "<li><a href='/question/"+respons._id+"' target='_blank'>"+respons.question+"</a></li>";
+            result += "<li><a href='/question/"+respons._id+"' target='_blank'>"+respons.question+"</a></li>";
             });
             $('#searchResultDisplay').html(result);
           })
       }
       }
-
+// Paginates the Displayed Question
       function paginate(){
         const totalRecord = <%=totalRecord %>;
         const possiblePages = Math.ceil(totalRecord/10);

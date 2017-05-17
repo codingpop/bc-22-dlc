@@ -45,27 +45,6 @@
       <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
       <!-- Add A Question -->
   <script src="js/validate.js" type="text/javascript"></script>
-  <script>
-      function addQuestion() {
-        const yourQuestion = $('#yourquestion').val();
-        const notify = $('#test5').val();
-        const tag = $('#tag').val();
-        $.post('/addQuestion',{question:yourQuestion, notify: notify, tag: tag}, function(response){
-          $('#msgdisplay').text(response);
-        });
-      }
-      function search(terms){
-        if(terms.length > 5){
-          $.post('/search',{term: terms}, function(response){
-            let result = '';
-            response.forEach(function(respons){
-              result += "<li><a href='/question/"+respons._id+"' target='_blank'>"+respons.question+"</a></li>";
-            });
-            $('#searchResultDisplay').html(result);
-          })
-      }
-      }
-  </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
    </body>
