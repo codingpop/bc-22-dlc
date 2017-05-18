@@ -31,15 +31,11 @@ router.post('/', (req, res) => {
 
 // check for errors
   const errors = req.validationErrors();
+  console.log(errors);
+  
   if (errors) {
     res.render('signup', {
-      errors,
-      first_name,
-      last_name,
-      email,
-      username,
-      password,
-      password2
+      errors
     });
   } else {
     const newUser = new User({
@@ -54,11 +50,11 @@ router.post('/', (req, res) => {
     User.createUser(newUser, (err, user) =>{
       if (err) throw err;
       console.log(user);
-    });    
-    req.flash('success', 'User added');
+    });  
+    // req.flash('success', 'User added');
 
-    res.location('/');
-    res.redirect('/');
+
+    res.redirect('/dashboard');
   }
 });
 
