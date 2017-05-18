@@ -36,7 +36,7 @@ router.get('/', function (req, res) {
       }
     });
   }
-  res.render('login.ejs', { error: '', inputedValues: '' });
+  res.render('index.ejs');
 });
 router.get('/logout', function (req, res) {
   sess = req.session;
@@ -47,6 +47,10 @@ router.get('/logout', function (req, res) {
       res.redirect('/');
     }
   });
+});
+
+router.get('/login', function (req, res) {
+  res.render('login.ejs', { error: '', inputedValues: '' });
 });
 
 router.get('/savequestion', function (req, res) {
@@ -73,47 +77,41 @@ router.get('/startquiz', function (req, res) {
   }
 });
 
-router.get('/loadquiz', function (req, res) {
+router.post('/loadquiz', function (req, res) {
   sess = req.session;
-  if (sess.user) {
-    // 'Javascript will be replaced with the student's course'
-    var result = _database2.default.getQuestions("Let's Learn ES6");
-    result.then(function (loadedQuestion) {
-      res.render('doquiz.ejs', { questions: loadedQuestion });
-    });
-  } else {
-    res.redirect('/');
-  }
+  sess.course = req.body.course;
+  var result = _database2.default.getQuestions(req.body.course);
+  result.then(function (loadedQuestion) {
+    res.send(loadedQuestion);
+  });
 });
 
 router.post('/showresult', function (req, res) {
   sess = req.session;
   if (sess.user) {
-    // add user name and course from session when merging
     sess = req.session;
-    var course = "Let's Learn ES6";
     var questions = Object.keys(req.body);
-    var getUnasweredQuestion = [];
-    for (var _question = 0; _question < questions.length; _question += 1) {
-      if (!Array.isArray(req.body[questions[_question]])) {
+    /* const getUnasweredQuestion = [];
+    for (let question = 0; question < questions.length; question += 1) {
+      if (!Array.isArray(req.body[questions[question]])) {
         getUnasweredQuestion.push('seen');
       }
     }
     if (getUnasweredQuestion.length > 0) {
       res.send('You have to answer all questions before submitting');
-    } else {
-      var scores = 0;
-      for (var _question2 = 0; _question2 < questions.length; _question2 += 1) {
-        if (Array.isArray(req.body[questions[_question2]])) {
-          if (req.body[questions[_question2]][0] === req.body[questions[_question2]][1]) {
-            scores += 1;
-          }
+    } else {*/
+    var scores = 0;
+    for (var _question = 0; _question < questions.length; _question += 1) {
+      if (Array.isArray(req.body[questions[_question]])) {
+        if (req.body[questions[_question]][0] === req.body[questions[_question]][1]) {
+          scores += 1;
         }
       }
-      // save the result to database;
-      _database2.default.saveResult(sess.user, scores, course);
-      res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
     }
+    // save the result to database;
+    _database2.default.saveResult(sess.user, scores, sess.course);
+    res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+    // }
   } else {
     res.redirect('/');
   }
@@ -189,7 +187,7 @@ router.post('/signup', function (req, res) {
           var hashedPassword = _bcrypt2.default.hashSync(req.body.password, salt);
           _database2.default.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
           sess.user = req.body.username;
-          res.render('dashboard.ejs');
+          res.send('Registration successful <a href="/">click here</a> to go and login');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
@@ -207,7 +205,7 @@ router.post('/dashboard', function (req, res) {
         if (req.body.username === 'admin') {
           res.render('admindashboard.ejs');
         } else {
-          console.log(result[0].id);
+          sess.userID = result[0].id;
           sess.user = result[0].username;
           var results = _database2.default.getResult(sess.user);
           results.then(function (records) {
