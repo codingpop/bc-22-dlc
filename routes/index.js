@@ -3,9 +3,11 @@ import Course from '../models/course';
 
 const router = express.Router();
 
-/* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
+  Course.find((err, data) => {
+    if (err) throw err;
+    res.render('index', { items: data });
+  }).sort({_id : -1 }).limit(6);
 });
 
 router.get('/dashboard', (req, res) => {
