@@ -6,7 +6,7 @@ import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
 
 gulp.task('transpile', () =>
-gulp.src(['src/**.js', 'tests/**.js'])
+gulp.src(['./**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.babel.js', '!coverage/**'])
 .pipe(babel()).pipe(gulp.dest('dist')));
 
 gulp.task('run-tests', ['transpile'], () =>
@@ -14,7 +14,7 @@ gulp.src(['tests/**.js'])
 .pipe(jasmineNode()));
 
 gulp.task('coverage', (cb) => {
-  gulp.src(['src/**.js'])
+  gulp.src(['**.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {
