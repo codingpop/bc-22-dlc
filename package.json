@@ -15,6 +15,7 @@
     "async": "^2.4.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-register": "^6.24.1",
     "bcryptjs": "*",
     "body-parser": "~1.16.0",

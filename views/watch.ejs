@@ -24,7 +24,7 @@
     </li>
     <h5 class="white-text"><%= item.title.toUpperCase() %></h5>
     <% item.chapters.forEach((chapter) => { %>
-      <li><a class="waves-effect white-text" href="/watch/<%= %>/<%= %>"><%- chapter.name %></a></li>
+      <li><a class="waves-effect white-text" href="/watch/video/<%= chapter.name %>"><%- chapter.name %></a></li>
     <% }) %>
   </ul>
   <!-- side-nav fixed sidenav-color -->
@@ -32,7 +32,7 @@
   <header class="section-header">
     <nav>
       <div class="nav-wrapper grey darken-3">
-        <a href="#" class="brand-logo" id="brand-size">
+        <a href="/dashboard" class="brand-logo" id="brand-size">
             <span class="orange-text text-accent-1">fast</span>
             <span class="brown-text text-lighten-2">Learners</span>
           </a>
@@ -47,10 +47,15 @@
 
   <div class="content">
     <h4><%= item.title.toUpperCase() %></h4>
+
+    <div class="progress">
+      <div class="determinate" style="width: 70%"></div>
+    </div> <!-- progress -->
+    
     <div class="row" id="course-categories">
       <div class="col s12">
         <div class="video-container">
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/LTbnmiXWs2k?rel=0" frameborder="0" allowfullscreen></iframe>
+          <%- video %>
         </div>
       </div>
     </div>

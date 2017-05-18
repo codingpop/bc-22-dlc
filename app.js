@@ -22,7 +22,6 @@ const localStrategy = passportLocal.Strategy;
 dotenv.config();
 
 const app = express();
-export default app;
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -89,16 +88,14 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res) =>{
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log('server now running at', port);
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
+
+module.exports = app;

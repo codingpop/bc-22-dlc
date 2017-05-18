@@ -3,14 +3,14 @@
     <title>fastLearners</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="/styles/style.css">
   </head>
 
   <body>
     <header>
       <nav>
         <div class="nav-wrapper grey darken-3">
-          <a href="#" class="brand-logo" id="brand-size">
+          <a href="/" class="brand-logo" id="brand-size">
             <span class="orange-text text-accent-1">fast</span>
             <span class="brown-text text-lighten-2">Learners</span>
           </a>
@@ -37,9 +37,6 @@
       <div class="col s7 login">
         <h4 class="center-align">Sign Up</h4>
         <form class="push-s2 col s9" method="post" action="/signup">
-          <% if (error) { %>
-            <li><%= error %></li>  
-            <% } %>
           <div class="row">
             <div class="input-field col s12">
                 <input id="first_name" name="first_name" type="text" class="validate pink-text.text-lighten-2">
@@ -72,7 +69,7 @@
         </form>
 
         <div class="clearfix options">
-	    	  <p class="black-text">Already have an account? <a href="#">Log in</a></p>
+	    	  <p class="black-text">Already have an account? <a href="/signin">Log in</a></p>
 		    </div>
       </div><!-- col s7 login -->
     </div><!-- row -->

@@ -7,7 +7,7 @@ const router = express.Router();
 /* GET users listing. */
 
 router.get('/', (req, res) => {
-  res.render('signup');
+  res.render('signup', { title: 'Sign Up' });
 });
 
 router.post('/', (req, res) => {
