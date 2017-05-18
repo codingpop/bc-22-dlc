@@ -146,6 +146,7 @@ router.get('/signup', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
+  sess = req.session;
   var userByUsername = _database2.default.getUserByUsername(req.body.username);
   var userByEmail = _database2.default.getUserByEmail(req.body.email);
   userByUsername.then(function (resultByUsername) {
@@ -188,7 +189,8 @@ router.post('/signup', function (req, res) {
         } else {
           var hashedPassword = _bcrypt2.default.hashSync(req.body.password, salt);
           _database2.default.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
-          res.send('Registration successful, click <a href="/">here</a> to go to login page');
+          sess.user = req.body.username;
+          res.render('dashboard.ejs');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
@@ -206,6 +208,7 @@ router.post('/dashboard', function (req, res) {
         if (req.body.username === 'admin') {
           res.render('admindashboard.ejs');
         } else {
+          console.log(result[0].id);
           sess.user = result[0].username;
           var results = _database2.default.getResult(sess.user);
           results.then(function (records) {

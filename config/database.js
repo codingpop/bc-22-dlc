@@ -41,6 +41,9 @@ class AssessmentDatabase {
       email: String,
       username: String,
       password: String,
+      courses: [{
+        course_id: { type: [mongoose.Schema.Types.ObjectId] },
+      }],
     });
     this.user = mongoose.model('users', userSchema);
   }

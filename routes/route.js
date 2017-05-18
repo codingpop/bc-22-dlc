@@ -128,6 +128,7 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
+  sess = req.session;
   const userByUsername = db.getUserByUsername(req.body.username);
   const userByEmail = db.getUserByEmail(req.body.email);
   userByUsername.then((resultByUsername) => {
@@ -189,6 +190,7 @@ router.post('/dashboard', (req, res) => {
         if (req.body.username === 'admin') {
           res.render('admindashboard.ejs');
         } else {
+          sess.userID = result[0].id;
           sess.user = result[0].username;
           const results = db.getResult(sess.user);
           results.then((records) => {
