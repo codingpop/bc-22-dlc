@@ -4,16 +4,15 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import expressValidator from 'express-validator';
 import flash from 'connect-flash';
-import session from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import cookieParser from 'cookie-parser';
 import mongo from 'mongodb';
 import mongoose from 'mongoose';
+import User from './models/user';
 import index from './routes/index';
 import signup from './routes/signup';
 import signin from './routes/signin';
-import async from 'async';
 
 mongoose.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
 const conn = mongoose.connection;
@@ -34,16 +33,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Handle express session
-app.use(session({
-    secret:'secret',
-    saveUninitialized: true,
-    resave:true
-}))
 
 // initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// passport config
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 
 // validator
 app.use(expressValidator({
@@ -81,22 +81,17 @@ app.use('/', index);
 app.use('/signup', signup);
 app.use('/signin', signin);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.configure('development', () => {
+//   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+// });
 
-// error handler
-app.use((err, req, res) =>{
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// app.configure('production', () => {
+//   app.use(express.errorHandler());
+// });
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// app.listen(app.get('port'), () => {
+//   console.log(("Express server listening on port " + app.get('port')))
+// });
+
 
 module.exports = app;
