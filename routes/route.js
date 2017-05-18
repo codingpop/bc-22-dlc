@@ -127,6 +127,7 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
+  sess = req.session;
   const userByUsername = db.getUserByUsername(req.body.username);
   const userByEmail = db.getUserByEmail(req.body.email);
   userByUsername.then((resultByUsername) => {
@@ -169,7 +170,8 @@ router.post('/signup', (req, res) => {
         } else {
           const hashedPassword = bcrypt.hashSync(req.body.password, salt);
           db.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
-          res.send('Registration successful, click <a href="/">here</a> to go to login page');
+          sess.user = req.body.username;
+          res.render('dashboard.ejs');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
@@ -187,6 +189,7 @@ router.post('/dashboard', (req, res) => {
         if (req.body.username === 'admin') {
           res.render('admindashboard.ejs');
         } else {
+          sess.userID = result[0].id;
           sess.user = result[0].username;
           const results = db.getResult(sess.user);
           results.then((records) => {

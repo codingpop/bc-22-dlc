@@ -56,7 +56,10 @@ var AssessmentDatabase = function () {
       last_name: String,
       email: String,
       username: String,
-      password: String
+      password: String,
+      courses: [{
+        course_id: { type: [_mongoose2.default.Schema.Types.ObjectId] }
+      }]
     });
     this.user = _mongoose2.default.model('users', userSchema);
   }
