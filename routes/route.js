@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
       }
     });
   }
-  res.render('login.ejs', { error: '', inputedValues: '' });
+  res.render('index.ejs');
 });
 router.get('/logout', (req, res) => {
   sess = req.session;
@@ -29,6 +29,10 @@ router.get('/logout', (req, res) => {
       res.redirect('/');
     }
   });
+});
+
+router.get('/login', (req, res) => {
+  res.render('login.ejs', { error: '', inputedValues: '' });
 });
 
 router.get('/savequestion', (req, res) => {
@@ -55,27 +59,21 @@ router.get('/startquiz', (req, res) => {
   }
 });
 
-router.get('/loadquiz', (req, res) => {
+router.post('/loadquiz', (req, res) => {
   sess = req.session;
-  if (sess.user) {
-    // 'Javascript will be replaced with the student's course'
-    const result = db.getQuestions("Let's Learn ES6");
-    result.then((loadedQuestion) => {
-      res.render('doquiz.ejs', { questions: loadedQuestion });
-    });
-  } else {
-    res.redirect('/');
-  }
+  sess.course = req.body.course;
+  const result = db.getQuestions(req.body.course);
+  result.then((loadedQuestion) => {
+    res.send(loadedQuestion);
+  });
 });
 
 router.post('/showresult', (req, res) => {
   sess = req.session;
   if (sess.user) {
-    // add user name and course from session when merging
     sess = req.session;
-    const course = "Let's Learn ES6";
     const questions = Object.keys(req.body);
-    const getUnasweredQuestion = [];
+    /* const getUnasweredQuestion = [];
     for (let question = 0; question < questions.length; question += 1) {
       if (!Array.isArray(req.body[questions[question]])) {
         getUnasweredQuestion.push('seen');
@@ -83,19 +81,19 @@ router.post('/showresult', (req, res) => {
     }
     if (getUnasweredQuestion.length > 0) {
       res.send('You have to answer all questions before submitting');
-    } else {
-      let scores = 0;
-      for (let question = 0; question < questions.length; question += 1) {
-        if (Array.isArray(req.body[questions[question]])) {
-          if (req.body[questions[question]][0] === req.body[questions[question]][1]) {
-            scores += 1;
-          }
+    } else {*/
+    let scores = 0;
+    for (let question = 0; question < questions.length; question += 1) {
+      if (Array.isArray(req.body[questions[question]])) {
+        if (req.body[questions[question]][0] === req.body[questions[question]][1]) {
+          scores += 1;
         }
       }
-    // save the result to database;
-      db.saveResult(sess.user, scores, course);
-      res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
     }
+    // save the result to database;
+    db.saveResult(sess.user, scores, sess.course);
+    res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+   // }
   } else {
     res.redirect('/');
   }
@@ -170,9 +168,9 @@ router.post('/signup', (req, res) => {
           res.render('signup.ejs', { error: errors, inputedValues: req.body });
         } else {
           const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-          db.registerUsers(req.body.first_name,
-             req.body.last_name, req.body.email, req.body.username, hashedPassword);
-          res.send('Registration successful, click <a href="/">here</a> to go to login page');
+          db.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
+          sess.user = req.body.username;
+          res.send('Registration successful <a href="/">click here</a> to go and login');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
