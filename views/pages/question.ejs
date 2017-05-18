@@ -12,8 +12,9 @@
           <div class="nav-wrapper">
             <!-- to be moved to the center -->
               <ul class="center" style="height:10px;">
-                  <li><b class="center" id="centralDisplay"> Were </b></li>
+                  <li><b class="center" id="centralDisplay"></b></li>
               </ul>
+            <!-- to be moved to the center -->
           </div>
       </nav>
     </div>
@@ -25,15 +26,16 @@
           <!-- Question holder -->
           <div id="questionHolder">
               <div id="question" class="card" style="padding:10px;">
-                    <h5>
+                    <textarea class="materialize-textarea" id="edit<%=question.id %>" onblur="saveEdit(this.value,'question','<%=question.id %>')"
+                       disabled style="border:1px solid #CCC; width:98%;  font-size:20px; padding:5px;" title="Click Outside this to save">
                       <%=question.question%>
-                    </h5>
-                  <% if (question.idOfPoster === 1) {%>
-                    <button class="btn" style="text-transform:capitalize; font-size:10px;">Edit</button>
-
+                    </textarea>
+                  <% if (question.idOfPoster === user.userID) {%>
+                    <a href="javascript:edit('question','<%=question.id %>')" style="text-transform:capitalize; font-size:10px;">Edit</a>
+                    <a href="javascript:deletes('question','<%=question.id %>')" style="text-transform:capitalize; font-size:10px;">Delete</a>
                     <% } %>
                   <h6>
-                    <%=question.idOfPoster%>.
+                    <%=user.user %>.
                     <i style="font-size:11px; text-transform:capitalize;"><%=question.date%></i>
                   </h6>
               </div>
@@ -43,13 +45,13 @@
               <div>
                 Answers for this Question
                 <% uniqueAnswer.forEach(function(answer) { %>
-                    <h6><%=answer.value%></h6>
+                    <input type="text" value="<%=answer.value%>" disabled id="answer<%=question.id %>"  >
                     <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">
                       Vote <i> <%=answer.voters.length%></i></button>
-                    <h6 class="right-align"><%=answer.idOfPoster %><i style="font-size:10px;"><%=answer.date %></i></h6>
-                    <% if (answer.idOfPoster === question.idOfPoster) {%>
-                    <button class="btn" style="text-transform:capitalize; font-size:10px;" onclick="edit(1)">Edit</button>
-
+                    <h6 class="right-align"><i style="font-size:10px;"><%=answer.date %></i></h6>
+                    <% if (answer.idOfPoster === user.userID) {%>
+                    <a href="javascript:edit('answer','<%=answer.id %>')" style="text-transform:capitalize; font-size:10px;">Edit</a>
+                    <a href="javascript:deletes('answer','<%=answer.id %>')" style="text-transform:capitalize; font-size:10px;">Delete</a>
                     <% } %>
                   <% }); %>
               </div>
@@ -85,7 +87,7 @@
             </div>
               <input type="hidden" value="<%=question._id %>" id="questionid" />
             <div>
-              <span><i>200 Characters More. you can use markdown</i></span>
+              <span><i>200 Characters Allowed.</i></span>
             </div>
           <button class="btn waves-effect waves-light grey" type="button" name="action" onclick="addAnswer()">Submit
               <i class="material-icons right">send</i>
@@ -97,6 +99,9 @@
       <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
   <script src="js/validate.js" type="text/javascript"></script>
   <script>
+  $(document).ready(function(){
+    $("#editorform").hide();
+  });
       function addAnswer() {
         const questionId =$('#questionid').val();
         const answer =$('#answer').val();
@@ -117,8 +122,34 @@
         });
       }
 
-      function edit(a){
-        alert(a);
+      function edit(type, key){
+        if (type === 'question'){
+            $('#edit<%=question.id %>').removeAttr('disabled');
+        } else {
+            $('#answer<%=question.id %>').removeAttr('disabled');
+        }
+      }
+
+      function saveEdit(val, type, id){
+        alert(val.trim());alert(type);alert(id);
+        $.post('/saveEdits', {type: type, val: val.trim(), key:id}, function(response){
+           $('#centralDisplay').text(response);
+           //location.reload();
+        });
+      }
+
+      function deletes(type, key){
+        if (type === 'question'){
+          $.post('/delete',{type:type, key:key}, function(response){
+            $('#centralDisplay').text(response);
+            window.location = '/forum';
+          });
+        } else {
+          $.post('/delete',{type:type, key:key}, function(response){
+            $('#centralDisplay').text(response);
+            window.location = '/forum';
+          });
+        }
       }
       function addViews() {
         $.post('/addviews', function(response){

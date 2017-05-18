@@ -189,8 +189,7 @@ router.post('/signup', function (req, res) {
         } else {
           var hashedPassword = _bcrypt2.default.hashSync(req.body.password, salt);
           _database2.default.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
-          sess.user = req.body.username;
-          res.render('dashboard.ejs');
+          res.send('Registration successful, click <a href="/">here</a> to go to login page');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
@@ -208,7 +207,7 @@ router.post('/dashboard', function (req, res) {
         if (req.body.username === 'admin') {
           res.render('admindashboard.ejs');
         } else {
-          console.log(result[0].id);
+          sess.userID = result[0].id;
           sess.user = result[0].username;
           var results = _database2.default.getResult(sess.user);
           results.then(function (records) {
@@ -243,7 +242,7 @@ var question = new Schema({
     type: String, required: true
   },
   idOfPoster: {
-    type: Number, required: true
+    type: String, required: true
   },
   date: {
     type: Date, required: true
@@ -274,7 +273,7 @@ var answers = new Schema({
     type: String, required: true
   },
   idOfPoster: {
-    type: Number, required: true
+    type: String, required: true
   },
   value: {
     type: String, required: true
@@ -314,10 +313,9 @@ router.post('/addQuestion', function (req, res) {
     var questionToAdd = req.body.question;
     var notifyToAdd = req.body.notify;
     var tagToAdd = req.body.tag;
-    // to add id of logined in user as idOfPoster
     var newQuestion = new Question({
       question: questionToAdd,
-      idOfPoster: 1,
+      idOfPoster: sess.userID,
       date: Date.now(),
       tag: tagToAdd,
       notify: notifyToAdd,
@@ -336,9 +334,6 @@ router.post('/addQuestion', function (req, res) {
 
 router.get('/question/:id', function (req, res) {
   sess = req.session;
-  var signedInUser = sess.userID;
-  console.log(sess.userID);
-  console.log(sess);
   if (sess.user) {
     var id = req.params.id;
     if (id.length >= 20) {
@@ -347,7 +342,7 @@ router.get('/question/:id', function (req, res) {
           throw err;
         }
         Answer.find({ questionid: id }).sort({ date: -1 }).exec(function (err, uniqueAnswers) {
-          res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers });
+          res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers, user: sess });
         });
       });
     } else {
@@ -373,7 +368,7 @@ router.post('/addAnswer', function (req, res) {
   if (sess.user) {
     var answer = req.body.answer;
     var questionId = req.body.questionid;
-    var userId = 1; // to change to a real userId
+    var userId = sess.userID;
     var newAnswer = new Answer({
       questionid: questionId,
       idOfPoster: userId,
@@ -413,10 +408,9 @@ router.post('/search', function (req, res) {
 });
 
 router.post('/addvote', function (req, res) {
-  // to change to real user
   sess = req.session;
   if (sess.user) {
-    var userId = 1;
+    var userId = sess.userID;
     var answerId = req.body.answerid;
     Answer.findById(answerId, function (err, answer) {
       var voters = answer.voters;
@@ -434,4 +428,54 @@ router.post('/addvote', function (req, res) {
   }
 });
 
+router.post('/delete', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    var type = req.body.type;
+    var key = req.body.key;
+    if (type === 'question') {
+      Question.findByIdAndRemove(key).exec(function (err) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send('Deleted');
+        }
+      });
+    } else {
+      Answer.findByIdAndRemove(key).exec(function (err) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send('Deleted');
+        }
+      });
+    }
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.post('/saveEdits', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    var type = req.body.type;
+    var val = req.body.val;
+    var id = req.body.key;
+    if (type === 'question') {
+      Question.findById(id, function (err, questionToSave) {
+        console.log(id);
+        questionToSave.question = val;
+        questionToSave.save();
+      });
+    } else {
+      Answer.findById(id, function (err, answerToSave) {
+        answerToSave.question = val;
+        Answer.save();
+      });
+    }
+    res.send('Saved');
+  } else {
+    res.redirect('/');
+  }
+});
 exports.default = router;

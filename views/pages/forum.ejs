@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title> Forum </title>
+      <title> Freelearners | Forum </title>
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
@@ -41,7 +41,7 @@
                   </h6>
               </div>
               <div id="response">
-                <button class="chip btn grey" style="font-size:11px;">Answers <i> <%=question.answer%></i></button>
+                <button class="chip btn grey" style="font-size:11px;">Answers <i> <%= question.answer %></i></button>
               </div>
                <!--Response -->
             <% }); %>
@@ -58,7 +58,6 @@
         <div class="col s3 card ">
           <h4>User Activities</h4>
           <div>
-            <button class="btn grey" style="font-size:11px;">Ask a Question</button>
             <div class="input-field col s12">
                <input placeholder="Search For a Question" id="first_name" type="text" class="validate" onkeyup="search(this.value)">
             </div>
@@ -87,7 +86,7 @@
               <label for="textarea1">Enter your Question.</label>
             </div>
             <div>
-              <span><i>200 Characters More. you can use markdown</i></span>
+              <span><i>200 Characters Allowed.</i></span>
             </div>
           <p>
             <input type="checkbox" id="test5" name="notify" />

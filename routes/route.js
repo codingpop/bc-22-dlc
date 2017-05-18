@@ -225,7 +225,7 @@ const question = new Schema({
     type: String, required: true
   },
   idOfPoster: {
-    type: Number, required: true
+    type: String, required: true
   },
   date: {
     type: Date, required: true
@@ -258,7 +258,7 @@ const answers = new Schema({
     type: String, required: true
   },
   idOfPoster: {
-    type: Number, required: true
+    type: String, required: true
   },
   value: {
     type: String, required: true
@@ -300,10 +300,9 @@ router.post('/addQuestion', (req, res) => {
     const questionToAdd = req.body.question;
     const notifyToAdd = req.body.notify;
     const tagToAdd = req.body.tag;
-    // to add id of logined in user as idOfPoster
     const newQuestion = new Question({
       question: questionToAdd,
-      idOfPoster: 1,
+      idOfPoster: sess.userID,
       date: Date.now(),
       tag: tagToAdd,
       notify: notifyToAdd,
@@ -322,9 +321,6 @@ router.post('/addQuestion', (req, res) => {
 
 router.get('/question/:id', (req, res) => {
   sess = req.session;
-  const signedInUser = sess.userID;
-  console.log(sess.userID);
-  console.log(sess);
   if (sess.user) {
     const id = req.params.id;
     if (id.length >= 20) {
@@ -333,7 +329,7 @@ router.get('/question/:id', (req, res) => {
           throw err;
         }
         Answer.find({ questionid: id }).sort({ date: -1 }).exec((err, uniqueAnswers) => {
-          res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers });
+          res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers, user: sess });
         });
       });
     } else {
@@ -359,7 +355,7 @@ router.post('/addAnswer', (req, res) => {
   if (sess.user) {
     const answer = req.body.answer;
     const questionId = req.body.questionid;
-    const userId = 1;   // to change to a real userId
+    const userId = sess.userID;
     const newAnswer = new Answer({
       questionid: questionId,
       idOfPoster: userId,
@@ -386,38 +382,86 @@ router.post('/addAnswer', (req, res) => {
 router.post('/search', (req, res) => {
   sess = req.session;
   if (sess.user) {
-  const searchTerm = req.body.term;
-  Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec((err, doc) => {
-    if (err) {
-      throw err;
-    }
-    res.send(doc);
-  });
-} else {
-  res.redirect('/');
-}
+    const searchTerm = req.body.term;
+    Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec((err, doc) => {
+      if (err) {
+        throw err;
+      }
+      res.send(doc);
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/addvote', (req, res) => {
-  // to change to real user
   sess = req.session;
   if (sess.user) {
-  const userId = 1;
-  const answerId = req.body.answerid;
-  Answer.findById(answerId, (err, answer) => {
-    const voters = answer.voters;
-    if (voters.indexOf(userId) < 0) {
-      voters.push(userId);
-      answer.voters = voters;
-      answer.save();
-      res.send('Done');
-    } else {
-      res.send('You have voted already');
-    }
-  });
-} else {
-  res.redirect('/');
-}
+    const userId = sess.userID;
+    const answerId = req.body.answerid;
+    Answer.findById(answerId, (err, answer) => {
+      const voters = answer.voters;
+      if (voters.indexOf(userId) < 0) {
+        voters.push(userId);
+        answer.voters = voters;
+        answer.save();
+        res.send('Done');
+      } else {
+        res.send('You have voted already');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
+router.post('/delete', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    const type = req.body.type;
+    const key = req.body.key;
+    if (type === 'question') {
+      Question.findByIdAndRemove(key).exec((err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send('Deleted');
+        }
+      });
+    } else {
+      Answer.findByIdAndRemove(key).exec((err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send('Deleted');
+        }
+      });
+    }
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.post('/saveEdits', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    const type = req.body.type;
+    const val = req.body.val;
+    const id = req.body.key;
+    if (type === 'question') {
+      Question.findById(id, (err, questionToSave) => {
+        questionToSave.question = val;
+        questionToSave.save();
+      });
+    } else {
+      Answer.findById(id, (err, answerToSave) => {
+        answerToSave.question = val;
+        answerToSave.save();
+      });
+    }
+    res.send('Saved');
+  } else {
+    res.redirect('/');
+  }
+});
 export default router;
