@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
 import bcrypt from 'bcryptjs';
 
 // mongoose.connect('mongodb://localhost/fastlearn');
@@ -21,9 +22,18 @@ const userSchema = mongoose.Schema({
     type: 'string',
     bcrypt: true
   },
+  classes: [{
+    class_id: { type: [mongoose.Schema.Types.ObjectId] },
+    class_title: { type: 'string' }
+  }],
+  assessment: [{
+    assessment_id: { type: [mongoose.Schema.Types.ObjectId] },
+  }]
 });
 
-const User = module.exports = mongoose.model('User', userSchema);
+userSchema.plugin(passportLocalMongoose);
+
+module.exports = mongoose.model('User', userSchema);
 
 // fetch user
 module.exports.getUserById = (id, callback) => {
