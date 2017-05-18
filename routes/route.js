@@ -241,7 +241,7 @@ const question = new Schema({
     type: String, required: true
   },
   answer: {
-    poster: { type: Array, required: false }
+    poster: { type: Number, required: false }
   },
   views: {
     viewers: { type: Array, required: false }
@@ -295,7 +295,8 @@ router.post('/addQuestion', (req, res) => {
     idOfPoster: 1,
     date: Date.now(),
     tag: tagToAdd,
-    notify: notifyToAdd
+    notify: notifyToAdd,
+    answer: 0
   });
   newQuestion.save((err) => {
     if (err) {
@@ -345,6 +346,11 @@ router.post('/addAnswer', (req, res) => {
     if (err) {
       res.send(err);
     } else {
+      Question.findByIdAndUpdate(questionId, { $inc: { answer: 1 } }, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
       res.send('Added');
     }
   });
