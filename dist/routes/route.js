@@ -28,7 +28,25 @@ var router = _express2.default.Router();
 // Nurudeen starts here
 var sess = void 0;
 router.get('/', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    req.session.destroy(function (err) {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+  }
   res.render('login.ejs', { error: '', inputedValues: '' });
+});
+router.get('/logout', function (req, res) {
+  sess = req.session;
+  req.session.destroy(function (err) {
+    if (err) {
+      throw new Error(err);
+    } else {
+      res.redirect('/');
+    }
+  });
 });
 
 router.get('/savequestion', function (req, res) {
@@ -47,33 +65,67 @@ router.post('/savequestion', function (req, res) {
 });
 
 router.get('/startquiz', function (req, res) {
-  res.render('startquiz.ejs');
+  sess = req.session;
+  if (sess.user) {
+    res.render('startquiz.ejs');
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/loadquiz', function (req, res) {
-  // 'Javascript will be replaced with the student's course'
-  var result = _database2.default.getQuestions("Let's Learn ES6");
-  result.then(function (loadedQuestion) {
-    res.render('doquiz.ejs', { questions: loadedQuestion });
-  });
+  sess = req.session;
+  if (sess.user) {
+    // 'Javascript will be replaced with the student's course'
+    var result = _database2.default.getQuestions("Let's Learn ES6");
+    result.then(function (loadedQuestion) {
+      res.render('doquiz.ejs', { questions: loadedQuestion });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/showresult', function (req, res) {
-  // add user name and course from session when merging
   sess = req.session;
-  var course = "Let's Learn ES6";
-  var questions = Object.keys(req.body);
-  var scores = 0;
-  for (var _question = 0; _question < questions.length; _question += 1) {
-    if (Array.isArray(req.body[questions[_question]])) {
-      if (req.body[questions[_question]][0] === req.body[questions[_question]][1]) {
-        scores += 1;
+  if (sess.user) {
+    // add user name and course from session when merging
+    sess = req.session;
+    var course = "Let's Learn ES6";
+    var questions = Object.keys(req.body);
+    var getUnasweredQuestion = [];
+    for (var _question = 0; _question < questions.length; _question += 1) {
+      if (!Array.isArray(req.body[questions[_question]])) {
+        getUnasweredQuestion.push('seen');
       }
     }
+    if (getUnasweredQuestion.length > 0) {
+      res.send('You have to answer all questions before submitting');
+    } else {
+      var scores = 0;
+      for (var _question2 = 0; _question2 < questions.length; _question2 += 1) {
+        if (Array.isArray(req.body[questions[_question2]])) {
+          if (req.body[questions[_question2]][0] === req.body[questions[_question2]][1]) {
+            scores += 1;
+          }
+        }
+      }
+      // save the result to database;
+      _database2.default.saveResult(sess.user, scores, course);
+      res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+    }
+  } else {
+    res.redirect('/');
   }
-  // save the result to database;
-  _database2.default.saveResult(sess.user, scores, course);
-  res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+});
+
+router.get('/showresult', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/showallresult', function (req, res) {
@@ -88,7 +140,6 @@ router.get('/showallresult', function (req, res) {
   }
 });
 
-// Nurudeen stops here
 router.get('/signup', function (req, res) {
   res.render('signup.ejs', { error: '', inputedValues: '' });
 });
@@ -128,15 +179,15 @@ router.post('/signup', function (req, res) {
         if (req.body.password !== req.body.password2) {
           errors.push({ param: 'password', msg: 'The two passwords did not match' });
         }
-        if (req.body.username.length < 8 || req.body.password.length < 8) {
-          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 8 characters' });
+        if (req.body.username.length < 5 || req.body.password.length < 5) {
+          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 5 characters' });
         }
         if (errors.length > 0) {
           res.render('signup.ejs', { error: errors, inputedValues: req.body });
         } else {
           var hashedPassword = _bcrypt2.default.hashSync(req.body.password, salt);
           _database2.default.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
-          res.send('Registration successful, click <a href="/signup">here</a> to go to login page');
+          res.send('Registration successful, click <a href="/">here</a> to go to login page');
         }
       } else {
         res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
@@ -145,18 +196,21 @@ router.post('/signup', function (req, res) {
   });
 });
 
-router.post('/login', function (req, res) {
+router.post('/dashboard', function (req, res) {
   sess = req.session;
   var userByUsername = _database2.default.getUserByUsername(req.body.username);
   userByUsername.then(function (result) {
     if (result.length !== 0) {
       if (_bcrypt2.default.compareSync(req.body.password, result[0].password)) {
-        sess.user = result[0].username;
-        var results = _database2.default.getResult(sess.user);
-        results.then(function (records) {
-          // get u
-          res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records[0].score });
-        });
+        if (req.body.username === 'admin') {
+          res.render('admindashboard.ejs');
+        } else {
+          sess.user = result[0].username;
+          var results = _database2.default.getResult(sess.user);
+          results.then(function (records) {
+            res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records });
+          });
+        }
       } else {
         res.render('login.ejs', { error: 'Incorrect password', inputedValues: req.body });
       }
@@ -166,6 +220,18 @@ router.post('/login', function (req, res) {
   });
 });
 
+router.get('/dashboard', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    var results = _database2.default.getResult(sess.user);
+    results.then(function (records) {
+      res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+// Nurudeen stops here
 // Emmannuel starts here
 var Schema = _mongoose2.default.Schema;
 var question = new Schema({

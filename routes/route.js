@@ -9,7 +9,25 @@ const router = express.Router();
 // Nurudeen starts here
 let sess;
 router.get('/', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    req.session.destroy((err) => {
+      if (err) {
+        throw new Error(err);
+      }
+    });
+  }
   res.render('login.ejs', { error: '', inputedValues: '' });
+});
+router.get('/logout', (req, res) => {
+  sess = req.session;
+  req.session.destroy((err) => {
+    if (err) {
+      throw new Error(err);
+    } else {
+      res.redirect('/');
+    }
+  });
 });
 
 router.get('/savequestion', (req, res) => {
@@ -28,33 +46,67 @@ router.post('/savequestion', (req, res) => {
 });
 
 router.get('/startquiz', (req, res) => {
-  res.render('startquiz.ejs');
+  sess = req.session;
+  if (sess.user) {
+    res.render('startquiz.ejs');
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/loadquiz', (req, res) => {
-  // 'Javascript will be replaced with the student's course'
-  const result = db.getQuestions("Let's Learn ES6");
-  result.then((loadedQuestion) => {
-    res.render('doquiz.ejs', { questions: loadedQuestion });
-  });
+  sess = req.session;
+  if (sess.user) {
+    // 'Javascript will be replaced with the student's course'
+    const result = db.getQuestions("Let's Learn ES6");
+    result.then((loadedQuestion) => {
+      res.render('doquiz.ejs', { questions: loadedQuestion });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/showresult', (req, res) => {
-    // add user name and course from session when merging
   sess = req.session;
-  const course = "Let's Learn ES6";
-  const questions = Object.keys(req.body);
-  let scores = 0;
-  for (let question = 0; question < questions.length; question += 1) {
-    if (Array.isArray(req.body[questions[question]])) {
-      if (req.body[questions[question]][0] === req.body[questions[question]][1]) {
-        scores += 1;
+  if (sess.user) {
+    // add user name and course from session when merging
+    sess = req.session;
+    const course = "Let's Learn ES6";
+    const questions = Object.keys(req.body);
+    const getUnasweredQuestion = [];
+    for (let question = 0; question < questions.length; question += 1) {
+      if (!Array.isArray(req.body[questions[question]])) {
+        getUnasweredQuestion.push('seen');
       }
     }
+    if (getUnasweredQuestion.length > 0) {
+      res.send('You have to answer all questions before submitting');
+    } else {
+      let scores = 0;
+      for (let question = 0; question < questions.length; question += 1) {
+        if (Array.isArray(req.body[questions[question]])) {
+          if (req.body[questions[question]][0] === req.body[questions[question]][1]) {
+            scores += 1;
+          }
+        }
+      }
+    // save the result to database;
+      db.saveResult(sess.user, scores, course);
+      res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+    }
+  } else {
+    res.redirect('/');
   }
-  // save the result to database;
-  db.saveResult(sess.user, scores, course);
-  res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
+});
+
+router.get('/showresult', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.get('/showallresult', (req, res) => {
@@ -69,7 +121,7 @@ router.get('/showallresult', (req, res) => {
   }
 });
 
-// Nurudeen stops here
+
 router.get('/signup', (req, res) => {
   res.render('signup.ejs', { error: '', inputedValues: '' });
 });
@@ -109,8 +161,8 @@ router.post('/signup', (req, res) => {
         if (req.body.password !== req.body.password2) {
           errors.push({ param: 'password', msg: 'The two passwords did not match' });
         }
-        if (req.body.username.length < 8 || req.body.password.length < 8) {
-          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 8 characters' });
+        if (req.body.username.length < 5 || req.body.password.length < 5) {
+          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 5 characters' });
         }
         if (errors.length > 0) {
           res.render('signup.ejs', { error: errors, inputedValues: req.body });
@@ -126,18 +178,21 @@ router.post('/signup', (req, res) => {
   });
 });
 
-router.post('/login', (req, res) => {
+router.post('/dashboard', (req, res) => {
   sess = req.session;
   const userByUsername = db.getUserByUsername(req.body.username);
   userByUsername.then((result) => {
     if (result.length !== 0) {
       if (bcrypt.compareSync(req.body.password, result[0].password)) {
-        sess.user = result[0].username;
-        const results = db.getResult(sess.user);
-        results.then((records) => {
-          // get u
-          res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records[0].score });
-        });
+        if (req.body.username === 'admin') {
+          res.render('admindashboard.ejs');
+        } else {
+          sess.user = result[0].username;
+          const results = db.getResult(sess.user);
+          results.then((records) => {
+            res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records });
+          });
+        }
       } else {
         res.render('login.ejs', { error: 'Incorrect password', inputedValues: req.body });
       }
@@ -147,6 +202,18 @@ router.post('/login', (req, res) => {
   });
 });
 
+router.get('/dashboard', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    const results = db.getResult(sess.user);
+    results.then((records) => {
+      res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+// Nurudeen stops here
 // Emmannuel starts here
 const Schema = mongoose.Schema;
 const question = new Schema({
