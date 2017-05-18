@@ -28,7 +28,10 @@
                     <h5>
                       <%=question.question%>
                     </h5>
-                  <!--<i>Edit</i>-->
+                  <% if (question.idOfPoster === 1) {%>
+                    <button class="btn" style="text-transform:capitalize; font-size:10px;">Edit</button>
+
+                    <% } %>
                   <h6>
                     <%=question.idOfPoster%>.
                     <i style="font-size:11px; text-transform:capitalize;"><%=question.date%></i>
@@ -44,6 +47,10 @@
                     <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">
                       Vote <i> <%=answer.voters.length%></i></button>
                     <h6 class="right-align"><%=answer.idOfPoster %><i style="font-size:10px;"><%=answer.date %></i></h6>
+                    <% if (answer.idOfPoster === question.idOfPoster) {%>
+                    <button class="btn" style="text-transform:capitalize; font-size:10px;" onclick="edit(1)">Edit</button>
+
+                    <% } %>
                   <% }); %>
               </div>
                <!--Response -->
@@ -110,6 +117,9 @@
         });
       }
 
+      function edit(a){
+        alert(a);
+      }
       function addViews() {
         $.post('/addviews', function(response){
            $('#msgdisplay').text(response);
