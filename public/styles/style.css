@@ -68,6 +68,7 @@
   background-image: url(/images/space.png);
   background-repeat: no-repeat;
   background-position: right top;
+  background-size: cover;
   min-height: 50px;
   padding-top: 10px;
   padding-bottom: 90px;
