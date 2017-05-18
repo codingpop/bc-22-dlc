@@ -12,23 +12,23 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _bcrypt = require('bcrypt');
+
+var _bcrypt2 = _interopRequireDefault(_bcrypt);
+
 var _database = require('../config/database');
 
 var _database2 = _interopRequireDefault(_database);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var salt = _bcrypt2.default.genSaltSync(10);
 var router = _express2.default.Router();
 
 // Nurudeen starts here
-
+var sess = void 0;
 router.get('/', function (req, res) {
-  var username = 'noordean';
-  var results = _database2.default.getResult(username);
-  results.then(function (result) {
-    // get username from session to replace noordean
-    res.render('studentsdashboard.ejs', { user: username, lastResult: result[0].score });
-  });
+  res.render('login.ejs', { error: '', inputedValues: '' });
 });
 
 router.get('/savequestion', function (req, res) {
@@ -60,7 +60,7 @@ router.get('/loadquiz', function (req, res) {
 
 router.post('/showresult', function (req, res) {
   // add user name and course from session when merging
-  var user = 'noordean';
+  sess = req.session;
   var course = "Let's Learn ES6";
   var questions = Object.keys(req.body);
   var scores = 0;
@@ -71,23 +71,26 @@ router.post('/showresult', function (req, res) {
       }
     }
   }
-
   // save the result to database;
-  _database2.default.saveResult(user, scores, course);
+  _database2.default.saveResult(sess.user, scores, course);
   res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
 });
 
 router.get('/showallresult', function (req, res) {
-  var username = 'noordean';
-  var results = _database2.default.getResult(username);
-  results.then(function (resultt) {
-    res.render('showallresult.ejs', { result: resultt });
-  });
+  sess = req.session;
+  if (sess.user) {
+    var results = _database2.default.getResult(sess.user);
+    results.then(function (resultt) {
+      res.render('showallresult.ejs', { result: resultt });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 // Nurudeen stops here
 router.get('/signup', function (req, res) {
-  res.render('signup.ejs');
+  res.render('signup.ejs', { error: '', inputedValues: '' });
 });
 
 router.post('/signup', function (req, res) {
@@ -96,9 +99,70 @@ router.post('/signup', function (req, res) {
   userByUsername.then(function (resultByUsername) {
     userByEmail.then(function (resultByEmail) {
       if (resultByUsername.length === 0 && resultByEmail.length === 0) {
-        res.send('registration successful');
+        // trim and escape user's inputs
+        req.sanitizeBody('first_name').trim();
+        req.sanitizeBody('first_name').escape();
+        req.sanitizeBody('last_name').trim();
+        req.sanitizeBody('last_name').escape();
+        req.sanitizeBody('username').trim();
+        req.sanitizeBody('username').escape();
+        req.sanitizeBody('email').trim();
+        req.sanitizeBody('email').escape();
+        req.sanitizeBody('password').trim();
+        req.sanitizeBody('password').escape();
+        req.sanitizeBody('password2').trim();
+        req.sanitizeBody('password2').escape();
+
+        // validate user inputs
+        req.checkBody('last_name', 'Lastname should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('first_name', 'Firstname should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('username', 'Username should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+        req.checkBody('email', 'A valid email address is required').notEmpty().isEmail();
+        req.checkBody('password', 'Password should contain only alphanumeric characters').notEmpty().isAlphanumeric();
+
+        // collect validation errors
+        var errors = [];
+        if (req.validationErrors()) {
+          errors = req.validationErrors();
+        }
+        if (req.body.password !== req.body.password2) {
+          errors.push({ param: 'password', msg: 'The two passwords did not match' });
+        }
+        if (req.body.username.length < 8 || req.body.password.length < 8) {
+          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 8 characters' });
+        }
+        if (errors.length > 0) {
+          res.render('signup.ejs', { error: errors, inputedValues: req.body });
+        } else {
+          var hashedPassword = _bcrypt2.default.hashSync(req.body.password, salt);
+          _database2.default.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
+          res.send('Registration successful, click <a href="/signup">here</a> to go to login page');
+        }
+      } else {
+        res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
       }
     });
+  });
+});
+
+router.post('/login', function (req, res) {
+  sess = req.session;
+  var userByUsername = _database2.default.getUserByUsername(req.body.username);
+  userByUsername.then(function (result) {
+    if (result.length !== 0) {
+      if (_bcrypt2.default.compareSync(req.body.password, result[0].password)) {
+        sess.user = result[0].username;
+        var results = _database2.default.getResult(sess.user);
+        results.then(function (records) {
+          // get u
+          res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records[0].score });
+        });
+      } else {
+        res.render('login.ejs', { error: 'Incorrect password', inputedValues: req.body });
+      }
+    } else {
+      res.render('login.ejs', { error: 'User does not exist', inputedValues: req.body });
+    }
   });
 });
 

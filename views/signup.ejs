@@ -15,8 +15,8 @@
             <span class="brown-text text-lighten-2">Learners</span>
           </a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/signin">Log In</a></li>
-            <li><a href="/">Sign Up</a></li>
+            <li><a href="/">Log In</a></li>
+            <li><a href="/signup">Sign Up</a></li>
           </ul>
         </div> <!-- nav-wrapper -->
       </nav>
@@ -37,30 +37,34 @@
       <div class="col s7 login">
         <h4 class="center-align">Sign Up</h4>
         <form class="push-s2 col s9" method="post" action="/signup">
-
+        <% if (error) {%>
+				<% for (var i = 0; i < error.length; i++) { %>
+					<li><%= error[i].msg %></li>
+				<% } %>
+        <% } %>
           <div class="row">
             <div class="input-field col s12">
-                <input id="first_name" name="first_name" type="text" class="validate pink-text.text-lighten-2" required> 
+                <input id="first_name" name="first_name" type="text" class="validate pink-text.text-lighten-2" value="<%= inputedValues.first_name %>" required> 
                 <label for="first_name">First Name</label>
               </div>
               <div class="input-field col s12">
-                <input id="last_name" name="last_name" type="text" class="validate pink-text.text-lighten-2" required>
+                <input id="last_name" name="last_name" type="text" class="validate pink-text.text-lighten-2" value="<%= inputedValues.last_name %>" required>
                 <label for="last_name">Last Name</label>
               </div>
               <div class="input-field col s12">
-                <input id="last_name" name="username" type="text" class="validate pink-text.text-lighten-2" required>
+                <input id="last_name" name="username" type="text" class="validate pink-text.text-lighten-2" value="<%= inputedValues.username %>" required>
                 <label for="last_name">User Name</label>
               </div>
               <div class="input-field col s12">
-                <input id="email" name="email" type="email" class="validate pink-text.text-lighten-2" required>
+                <input id="email" name="email" type="email" class="validate pink-text.text-lighten-2" value="<%= inputedValues.email %>" required>
                 <label for="email">Email</label>
               </div>
               <div class="input-field col s12">
-                <input id="password" name="password" type="password" class="validate pink-text.text-lighten-2" required>
+                <input id="password" name="password" type="password" class="validate pink-text.text-lighten-2" value="<%= inputedValues.password %>" required>
                 <label for="password">Password</label>
               </div>
                <div class="input-field col s12">
-                <input id="password" name="password2" type="password" class="validate pink-text.text-lighten-2" required>
+                <input id="password" name="password2" type="password" class="validate pink-text.text-lighten-2" value="<%= inputedValues.password2 %>" required>
                 <label for="password">Password</label>
               </div>
           </div>
@@ -70,7 +74,7 @@
         </form>
 
         <div class="clearfix options">
-	    	  <p class="black-text">Already have an account? <a href="#">Log in</a></p>
+	    	  <p class="black-text">Already have an account? <a href="/">Log in</a></p>
 		    </div>
       </div><!-- col s7 login -->
     </div><!-- row -->

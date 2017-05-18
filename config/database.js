@@ -120,8 +120,8 @@ class AssessmentDatabase {
     return result;
   }
 
-  getUserByUsername(user_name) {
-    const result = this.user.find({ username: user_name }).exec();
+  getUserByUsername(userName) {
+    const result = this.user.find({ username: userName }).exec();
     return result;
   }
   getUserByEmail(eMail) {

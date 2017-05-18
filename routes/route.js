@@ -1,22 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 import db from '../config/database';
 
-
+const salt = bcrypt.genSaltSync(10);
 const router = express.Router();
 
-
 // Nurudeen starts here
-
+let sess;
 router.get('/', (req, res) => {
-  const username = 'noordean';
-  const results = db.getResult(username);
-  results.then((result) => {
-   // get username from session to replace noordean
-    res.render('studentsdashboard.ejs', { user: username, lastResult: result[0].score });
-  });
+  res.render('login.ejs', { error: '', inputedValues: '' });
 });
-
 
 router.get('/savequestion', (req, res) => {
   res.render('addquestion.ejs');
@@ -47,7 +41,7 @@ router.get('/loadquiz', (req, res) => {
 
 router.post('/showresult', (req, res) => {
     // add user name and course from session when merging
-  const user = 'noordean';
+  sess = req.session;
   const course = "Let's Learn ES6";
   const questions = Object.keys(req.body);
   let scores = 0;
@@ -58,23 +52,26 @@ router.post('/showresult', (req, res) => {
       }
     }
   }
-
   // save the result to database;
-  db.saveResult(user, scores, course);
+  db.saveResult(sess.user, scores, course);
   res.render('showresult.ejs', { score: scores, totalQuestionNo: 10 });
 });
 
 router.get('/showallresult', (req, res) => {
-  const username = 'noordean';
-  const results = db.getResult(username);
-  results.then((resultt) => {
-    res.render('showallresult.ejs', { result: resultt });
-  });
+  sess = req.session;
+  if (sess.user) {
+    const results = db.getResult(sess.user);
+    results.then((resultt) => {
+      res.render('showallresult.ejs', { result: resultt });
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 // Nurudeen stops here
 router.get('/signup', (req, res) => {
-  res.render('signup.ejs');
+  res.render('signup.ejs', { error: '', inputedValues: '' });
 });
 
 router.post('/signup', (req, res) => {
@@ -109,11 +106,44 @@ router.post('/signup', (req, res) => {
         if (req.validationErrors()) {
           errors = req.validationErrors();
         }
-        if (req.body.password !== req.body.retypePassword){
-          errors.push({ 'param': 'password', 'msg': 'The two passwords did not match' }); 
+        if (req.body.password !== req.body.password2) {
+          errors.push({ param: 'password', msg: 'The two passwords did not match' });
         }
+        if (req.body.username.length < 8 || req.body.password.length < 8) {
+          errors.push({ param: 'username/password', msg: 'Username and Password must contain atleast 8 characters' });
+        }
+        if (errors.length > 0) {
+          res.render('signup.ejs', { error: errors, inputedValues: req.body });
+        } else {
+          const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+          db.registerUsers(req.body.first_name, req.body.last_name, req.body.email, req.body.username, hashedPassword);
+          res.send('Registration successful, click <a href="/">here</a> to go to login page');
+        }
+      } else {
+        res.render('signup.ejs', { error: [{ msg: 'You have registered before, kindly go and login' }], inputedValues: req.body });
       }
     });
+  });
+});
+
+router.post('/login', (req, res) => {
+  sess = req.session;
+  const userByUsername = db.getUserByUsername(req.body.username);
+  userByUsername.then((result) => {
+    if (result.length !== 0) {
+      if (bcrypt.compareSync(req.body.password, result[0].password)) {
+        sess.user = result[0].username;
+        const results = db.getResult(sess.user);
+        results.then((records) => {
+          // get u
+          res.render('studentsdashboard.ejs', { user: sess.user, lastResult: records[0].score });
+        });
+      } else {
+        res.render('login.ejs', { error: 'Incorrect password', inputedValues: req.body });
+      }
+    } else {
+      res.render('login.ejs', { error: 'User does not exist', inputedValues: req.body });
+    }
   });
 });
 

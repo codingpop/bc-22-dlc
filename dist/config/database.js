@@ -148,15 +148,31 @@ var AssessmentDatabase = function () {
     }
   }, {
     key: 'getUserByUsername',
-    value: function getUserByUsername(user_name) {
-      var result = this.user.find({ username: user_name }).exec();
+    value: function getUserByUsername(userName) {
+      var result = this.user.find({ username: userName }).exec();
       return result;
     }
   }, {
     key: 'getUserByEmail',
-    value: function getUserByEmail(e_mail) {
-      var result = this.user.find({ email: e_mail }).exec();
+    value: function getUserByEmail(eMail) {
+      var result = this.user.find({ email: eMail }).exec();
       return result;
+    }
+  }, {
+    key: 'registerUsers',
+    value: function registerUsers(firstName, lastName, eMail, userName, passWord) {
+      var userToInsert = new this.user({
+        first_name: firstName,
+        last_name: lastName,
+        email: eMail,
+        username: userName,
+        password: passWord
+      });
+      userToInsert.save(function (err) {
+        if (err) {
+          throw new Error(err);
+        }
+      });
     }
   }]);
 
