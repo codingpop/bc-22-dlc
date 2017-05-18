@@ -22,6 +22,7 @@ var _database2 = _interopRequireDefault(_database);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint linebreak-style: ["error", "windows"]*/
 var salt = _bcrypt2.default.genSaltSync(10);
 var router = _express2.default.Router();
 
@@ -287,114 +288,147 @@ var Question = _mongoose2.default.model('Question', question);
 var Answer = _mongoose2.default.model('Answer', answers);
 
 router.get('/forum', function (req, res) {
-  Question.find({}).sort({ date: -1 }).limit(10).exec(function (err, allQuestions) {
-    Question.find({}).exec(function (err, totalQuestion) {
-      if (err) {
-        throw err;
-      } else {
-        var totalRecords = totalQuestion.length;
-        res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords });
-      }
-    });
-  });
-});
-
-router.post('/addQuestion', function (req, res) {
-  var questionToAdd = req.body.question;
-  var notifyToAdd = req.body.notify;
-  var tagToAdd = req.body.tag;
-  // to add id of logined in user as idOfPoster
-  var newQuestion = new Question({
-    question: questionToAdd,
-    idOfPoster: 1,
-    date: Date.now(),
-    tag: tagToAdd,
-    notify: notifyToAdd,
-    answer: 0
-  });
-  newQuestion.save(function (err) {
-    if (err) {
-      res.send(err);
-    }
-    res.send('Saved');
-  });
-});
-
-router.get('/question/:id', function (req, res) {
-  var id = req.params.id;
-  if (id.length >= 20) {
-    Question.findById(id, function (err, uniqueQuestion) {
-      if (err) {
-        throw err;
-      }
-      Answer.find({ questionid: id }, function (err, uniqueAnswers) {
-        res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers });
+  sess = req.session;
+  if (sess.user) {
+    Question.find({}).sort({ date: -1 }).limit(10).exec(function (err, allQuestions) {
+      Question.find({}).exec(function (err, totalQuestion) {
+        if (err) {
+          throw err;
+        } else {
+          var totalRecords = totalQuestion.length;
+          res.render('pages/forum.ejs', { questions: allQuestions, totalRecord: totalRecords });
+        }
       });
     });
   } else {
-    Question.find({ tag: id }, function (err, singleQuestion) {
-      var totalRecords = singleQuestion.length;
-      if (err) {
-        throw err;
-      }
-      if (singleQuestion.length === 0) {
-        res.render('pages/forum404.ejs');
-      } else {
-        res.render('pages/forum.ejs', { questions: singleQuestion, totalRecord: totalRecords });
-      }
+    res.redirect('/');
+  }
+});
+
+router.post('/addQuestion', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    var questionToAdd = req.body.question;
+    var notifyToAdd = req.body.notify;
+    var tagToAdd = req.body.tag;
+    // to add id of logined in user as idOfPoster
+    var newQuestion = new Question({
+      question: questionToAdd,
+      idOfPoster: 1,
+      date: Date.now(),
+      tag: tagToAdd,
+      notify: notifyToAdd,
+      answer: 0
     });
+    newQuestion.save(function (err) {
+      if (err) {
+        res.send(err);
+      }
+      res.send('Saved');
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.get('/question/:id', function (req, res) {
+  sess = req.session;
+  var signedInUser = sess.userID;
+  console.log(sess.userID);
+  console.log(sess);
+  if (sess.user) {
+    var id = req.params.id;
+    if (id.length >= 20) {
+      Question.findById(id, function (err, uniqueQuestion) {
+        if (err) {
+          throw err;
+        }
+        Answer.find({ questionid: id }).sort({ date: -1 }).exec(function (err, uniqueAnswers) {
+          res.render('pages/question.ejs', { question: uniqueQuestion, uniqueAnswer: uniqueAnswers });
+        });
+      });
+    } else {
+      Question.find({ tag: id }, function (err, singleQuestion) {
+        var totalRecords = singleQuestion.length;
+        if (err) {
+          throw err;
+        }
+        if (singleQuestion.length === 0) {
+          res.render('pages/forum404.ejs');
+        } else {
+          res.render('pages/forum.ejs', { questions: singleQuestion, totalRecord: totalRecords });
+        }
+      });
+    }
+  } else {
+    res.redirect('/');
   }
 });
 
 router.post('/addAnswer', function (req, res) {
-  var answer = req.body.answer;
-  var questionId = req.body.questionid;
-  var userId = 1; // to change to a real userId
-  var newAnswer = new Answer({
-    questionid: questionId,
-    idOfPoster: userId,
-    value: answer,
-    date: Date.now()
-  });
-  newAnswer.save(function (err) {
-    if (err) {
-      res.send(err);
-    } else {
-      Question.findByIdAndUpdate(questionId, { $inc: { answer: 1 } }, function (err) {
-        if (err) {
-          throw err;
-        }
-      });
-      res.send('Added');
-    }
-  });
+  sess = req.session;
+  if (sess.user) {
+    var answer = req.body.answer;
+    var questionId = req.body.questionid;
+    var userId = 1; // to change to a real userId
+    var newAnswer = new Answer({
+      questionid: questionId,
+      idOfPoster: userId,
+      value: answer,
+      date: Date.now()
+    });
+    newAnswer.save(function (err) {
+      if (err) {
+        res.send(err);
+      } else {
+        Question.findByIdAndUpdate(questionId, { $inc: { answer: 1 } }, function (err) {
+          if (err) {
+            throw err;
+          }
+        });
+        res.send('Added');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/search', function (req, res) {
-  var searchTerm = req.body.term;
-  Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec(function (err, doc) {
-    if (err) {
-      throw err;
-    }
-    res.send(doc);
-  });
+  sess = req.session;
+  if (sess.user) {
+    var searchTerm = req.body.term;
+    Question.find({ question: new RegExp(searchTerm, 'i') }).limit(5).exec(function (err, doc) {
+      if (err) {
+        throw err;
+      }
+      res.send(doc);
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 router.post('/addvote', function (req, res) {
   // to change to real user
-  var userId = 1;
-  var answerId = req.body.answerid;
-  Answer.findById(answerId, function (err, answer) {
-    var voters = answer.voters;
-    if (voters.indexOf(userId) < 0) {
-      voters.push(userId);
-      answer.voters = voters;
-      answer.save();
-      res.send('Done');
-    } else {
-      res.send('You have voted already');
-    }
-  });
+  sess = req.session;
+  if (sess.user) {
+    var userId = 1;
+    var answerId = req.body.answerid;
+    Answer.findById(answerId, function (err, answer) {
+      var voters = answer.voters;
+      if (voters.indexOf(userId) < 0) {
+        voters.push(userId);
+        answer.voters = voters;
+        answer.save();
+        res.send('Done');
+      } else {
+        res.send('You have voted already');
+      }
+    });
+  } else {
+    res.redirect('/');
+  }
 });
 
 exports.default = router;
