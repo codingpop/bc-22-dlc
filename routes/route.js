@@ -35,15 +35,6 @@ router.get('/startquiz', (req, res) => {
   }
 });
 
-router.post('/loadquiz', (req, res) => {
-  sess = req.session;
-  sess.course = req.body.course;
-  const result = db.getQuestions(req.body.course);
-  result.then((loadedQuestion) => {
-    res.send(loadedQuestion);
-  });
-});
-
 router.post('/showresult', (req, res) => {
   sess = req.session;
   if (sess.user) {
@@ -218,6 +209,18 @@ router.get('/profile', (req, res) => {
   });
 });
 
+router.get('/assessment', (req, res) => {
+  sess = req.session;
+  if (sess.user) {
+    Course.find((err, data) => {
+      if (err) throw err;
+      res.render('assessment', { items: data, user: sess.user });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
 router.get('/dashboard', (req, res) => {
   sess = req.session;
   if (sess.user) {
@@ -228,6 +231,18 @@ router.get('/dashboard', (req, res) => {
   } else {
     res.redirect('/');
   }
+});
+
+router.get('/quiz/:id', (req, res) => {
+  sess = req.session;
+  const idValue = req.params.id;
+  Course.findOne({ _id: idValue }, (err, data) => {
+    if (err) throw err;
+    const result = db.getQuestions(data.title);
+    result.then((loadedQuestion) => {
+      res.render('doquiz.ejs', {questions: loadedQuestion});
+    });
+  });
 });
 
 const Schema = mongoose.Schema;

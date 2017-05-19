@@ -40,7 +40,7 @@
     </header><!-- section-header -->
 
     <div class="content">
-      <h4>Dashboard</h4>
+      <h4>ASSESSMENTS</h4>
       <div class="row" id="course-categories">
       <% items.forEach((result) => { %>
         <div class="col s4">
@@ -50,7 +50,7 @@
               <p><%= result.desc %></p>
             </div>
             <div class="card-action">
-              <a href="/watch/<%= result._id %>">TAKE COURSE</a>
+              <a href="/quiz/<%= result._id %>">TAKE ASSESSMENT</a>
             </div>
           </div>
         </div>

@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -61,20 +57,12 @@ router.get('/startquiz', function (req, res) {
   }
 });
 
-router.post('/loadquiz', function (req, res) {
-  sess = req.session;
-  sess.course = req.body.course;
-  var result = _database2.default.getQuestions(req.body.course);
-  result.then(function (loadedQuestion) {
-    res.send(loadedQuestion);
-  });
-});
-
 router.post('/showresult', function (req, res) {
+  console.log(req.body);
   sess = req.session;
   if (sess.user) {
     sess = req.session;
-    var questions = (0, _keys2.default)(req.body);
+    var questions = Object.keys(req.body);
     var scores = 0;
     for (var _question = 0; _question < questions.length; _question += 1) {
       if (Array.isArray(req.body[questions[_question]])) {
@@ -243,6 +231,18 @@ router.get('/profile', function (req, res) {
   });
 });
 
+router.get('/assessment', function (req, res) {
+  sess = req.session;
+  if (sess.user) {
+    _course2.default.find(function (err, data) {
+      if (err) throw err;
+      res.render('assessment', { items: data, user: sess.user });
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
 router.get('/dashboard', function (req, res) {
   sess = req.session;
   if (sess.user) {
@@ -253,6 +253,18 @@ router.get('/dashboard', function (req, res) {
   } else {
     res.redirect('/');
   }
+});
+
+router.get('/quiz/:id', function (req, res) {
+  sess = req.session;
+  var idValue = req.params.id;
+  _course2.default.findOne({ _id: idValue }, function (err, data) {
+    if (err) throw err;
+    var result = _database2.default.getQuestions(data.title);
+    result.then(function (loadedQuestion) {
+      res.render('doquiz.ejs', { questions: loadedQuestion });
+    });
+  });
 });
 
 var Schema = _mongoose2.default.Schema;

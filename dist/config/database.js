@@ -4,19 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * database class
@@ -28,7 +24,7 @@ var AssessmentDatabase = function () {
    * @constructor
    */
   function AssessmentDatabase() {
-    (0, _classCallCheck3.default)(this, AssessmentDatabase);
+    _classCallCheck(this, AssessmentDatabase);
 
     _mongoose2.default.connect('mongodb://jchinonso:poly12345@ds143221.mlab.com:43221/fastlearn');
     var db = _mongoose2.default.connection;
@@ -81,7 +77,7 @@ var AssessmentDatabase = function () {
    */
 
 
-  (0, _createClass3.default)(AssessmentDatabase, [{
+  _createClass(AssessmentDatabase, [{
     key: 'saveQuestion',
     value: function saveQuestion(theQuestion, optionA, optionB, optionC, optionD, rightAnswer, courseOfStudy) {
       var questionToPut = new this.Question({
@@ -182,6 +178,7 @@ var AssessmentDatabase = function () {
       });
     }
   }]);
+
   return AssessmentDatabase;
 }();
 
