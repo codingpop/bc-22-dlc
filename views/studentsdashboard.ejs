@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+</title>
+  <style>
+      #submitquiz {visibility: hidden}
+  </style>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1"/>
+</head>
+<body>
+	<div class="container">
+		<h1 id="header">DLC</h1>
+        
+        <div><%=user%></div>
+        <div><button id="takeassessment">Take assessemnt</button></div>
+        <% if (lastResult.length > 0) {%>
+          <div>Last Result: <%=Math.floor((lastResult[0].score/10)*100)%>%</div>
+        <%} else {%>
+          <div>Last Result: No result yet</div>
+        <%}%>
+        <div><a href="/showallresult">View all previous results</a></div>
+        <div><a href="/forum">Community</a></div>
+        <div><a href="/logout">Log out</a></div>
+	</div>
+
+
+<form action="/showresult" method="post"> 
+<div id="displayArea">
+  
+</div>
+<input type="submit" value="Submit Quiz" id="submitquiz"/>
+</form>
+
+<script type="text/javascript" src="showquiz.js"></script>
+</body>
+</html>

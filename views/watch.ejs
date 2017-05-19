@@ -1,0 +1,87 @@
+<html>
+
+<head>
+  <title>fastLearners</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body>
+
+  <ul id="slide-out" class="side-nav fixed sidenav-color">
+    <li>
+      <div class="userView">
+        <div class="background">
+          <img src="/images/cover.jpg" id="cover">
+        </div>
+        <!-- background -->
+        <img class="circle" src="/images/flashindex-logo.jpg" id="logo-picture">
+        <span class="white-text name">fastLearners</span>
+        <span class="white-text email">The fastest way to own your learning</span>
+      </div>
+      <!-- userView -->
+    </li>
+    <h5 class="white-text"><%= item.title.toUpperCase() %></h5>
+    <% item.chapters.forEach((chapter) => { %>
+      <li><a class="waves-effect white-text" href="/watch/video/<%= chapter.name %>"><%- chapter.name %></a></li>
+    <% }) %>
+  </ul>
+  <!-- side-nav fixed sidenav-color -->
+
+  <header class="section-header">
+    <nav>
+      <div class="nav-wrapper grey darken-3">
+        <a href="/dashboard" class="brand-logo" id="brand-size">
+            <span class="orange-text text-accent-1">fast</span>
+            <span class="brown-text text-lighten-2">Learners</span>
+          </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="#">Log Out</a></li>
+        </ul>
+      </div>
+      <!-- nav-wrapper -->
+    </nav>
+  </header>
+  <!-- section-header -->
+
+  <div class="content">
+    <h4><%= item.title.toUpperCase() %></h4>
+
+    <div class="progress">
+      <div class="determinate" style="width: 70%"></div>
+    </div> <!-- progress -->
+    
+    <div class="row" id="course-categories">
+      <div class="col s12">
+        <div class="video-container">
+          <%- video %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <a class="waves-effect waves-light btn right">Next</a>
+        <a class="waves-effect waves-light btn left">Previous</a>
+      </div>
+    </div>
+  </div>
+  <!-- content -->
+
+  <footer class="page-footer section-footer grey darken-3">
+      <div class="footer-copyright">
+        <div class="container">
+        © 2017 fastLearners
+        <a class="grey-text text-lighten-4 right" href="/">Home</a>
+        <a class="grey-text text-lighten-4 right" href="/about">About</a>
+        <a class="grey-text text-lighten-4 right" href="/content">Contact</a>
+        </div>
+      </div>
+    </footer><!-- page-footer section-footer grey darken-3 -->
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+  <script type="text/javascript" src="/script/init.js"></script>
+</body>
+
+</html>

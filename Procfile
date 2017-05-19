@@ -1,0 +1,1 @@
+web: gulp transpile && node dist/server.js

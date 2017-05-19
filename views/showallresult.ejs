@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+
+</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1"/>
+</head>
+<body>
+	<div class="container">
+		<h1 id="header">DLC</h1>
+        <% if (result.length > 0) {%>
+           <table>
+              <tr>
+                  <th>Course</th>
+                  <th>Score</th>
+                  <th>Date</th>
+              </tr>
+         <% for (var i=0;i<result.length;i++) {%>
+              <tr>
+                  <td><%=result[i].course%></td>
+                  <td><%=Math.floor((result[i].score/10)*100)%>%</td>
+                  <td><%=new Date(Number(result[i].date)).toLocaleString()%></td>
+              </tr>
+         <%}%>
+           </table>
+        <%} else {%>
+        <p>No previous assessment found</p>
+        <%}%>
+	</div>
+
+</body>
+</html>

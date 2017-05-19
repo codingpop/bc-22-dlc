@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>fastLearners</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/style.css">
+  </head>
+  <body>
+
+  <ul id="slide-out" class="side-nav fixed sidenav-color">
+    <li>
+      <div class="userView">
+        <div class="background">
+          <img src="/images/cover.jpg" id="cover">
+        </div><!-- background -->
+        <img class="circle" src="/images/flashindex-logo.jpg" id="logo-picture">
+        <span class="white-text name">fastLearners</span>
+        <span class="white-text email">The fastest way to own your learning</span>
+        <span class="white-text name"><%= user %></span>
+      </div><!-- userView -->
+    </li>
+    <li><a  class="waves-effect white-text" href="/dashboard"><i class="material-icons white-text">view_headline</i>DASHBOARD</a></li>
+    <li><a class="waves-effect white-text" href="/assessment"><i class="material-icons white-text">library_books</i>ASSESSMENTS</a></li>
+    <li><a class="waves-effect white-text" href="/profile"><i class="material-icons white-text">perm_identity</i>PROFILE</a></li>
+    <li><a class="waves-effect white-text" href="/forum"><i class="material-icons white-text">forum</i>COMMUNITY</a></li>
+  </ul><!-- side-nav fixed sidenav-color -->
+
+    <header class="section-header">
+      <nav>
+        <div class="nav-wrapper grey darken-3">
+          <a href="/dashboard" class="brand-logo" id="brand-size">
+            <span class="orange-text text-accent-1">fast</span>
+            <span class="brown-text text-lighten-2">Learners</span>
+          </a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/logout">Log Out</a></li>
+          </ul>
+        </div> <!-- nav-wrapper -->
+      </nav>
+    </header><!-- section-header -->
+
+    <div class="content">
+      <h4>ASSESSMENTS</h4>
+      <div class="row" id="course-categories">
+      <% items.forEach((result) => { %>
+        <div class="col s4">
+          <div class="card hoverable">
+            <div class="card-content black-text">
+              <span class="card-title"><%= result.title %></span>
+              <p><%= result.desc %></p>
+            </div>
+            <div class="card-action">
+              <a href="/quiz/<%= result._id %>">TAKE ASSESSMENT</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+      </div><!-- top-courses -->
+    </div><!-- content --> 
+
+    <footer class="page-footer section-footer grey darken-3">
+      <div class="footer-copyright">
+        <div class="container">
+        © 2017 fastLearners
+        <a class="grey-text text-lighten-4 right" href="/">Home</a>
+        <a class="grey-text text-lighten-4 right" href="/about">About</a>
+        <a class="grey-text text-lighten-4 right" href="/content">Contact</a>
+        </div>
+      </div>
+    </footer><!-- page-footer section-footer grey darken-3 -->
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="script/init.js"></script>
+  </body>
+</html>

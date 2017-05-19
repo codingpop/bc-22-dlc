@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title> Forum </title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav class="black">
+          <div class="nav-wrapper">
+            <!-- to be moved to the center -->
+              <ul class="center" style="height:10px;">
+                  <li><b class="center" id="centralDisplay"></b></li>
+              </ul>
+            <!-- to be moved to the center -->
+          </div>
+      </nav>
+    </div>
+
+    <div class="row">
+        <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
+        <!-- Question card -->
+        <div class="col s6 card">
+          <!-- Question holder -->
+          <div id="questionHolder">
+              <div id="question" class="card" style="padding:10px;">
+                    <textarea class="materialize-textarea" id="edit<%=question.id %>" onblur="saveEdit(this.value,'question','<%=question.id %>')"
+                       disabled style="border:1px solid #CCC; width:98%;  font-size:20px; padding:5px;" title="Click Outside this to save">
+                      <%=question.question%>
+                    </textarea>
+                  <% if (question.idOfPoster === user.userID) {%>
+                    <a href="javascript:edit('question','<%=question.id %>')" style="text-transform:capitalize; font-size:10px;">Edit</a>
+                    <a href="javascript:deletes('question','<%=question.id %>')" style="text-transform:capitalize; font-size:10px;">Delete</a>
+                    <% } %>
+                  <h6>
+                    <%=user.user %>.
+                    <i style="font-size:11px; text-transform:capitalize;"><%=question.date%></i>
+                  </h6>
+              </div>
+              <div id="response">
+                <button class="chip btn grey" style="font-size:11px;">Answers <i> <%=uniqueAnswer.length %></i></button>
+              </div>
+              <div>
+                Answers for this Question
+                <% uniqueAnswer.forEach(function(answer) { %>
+                    <input type="text" value="<%=answer.value%>" disabled id="answer<%=question.id %>"  >
+                    <button class="chip btn grey" style="font-size:11px; text-transform:capitalize;" value="<%=answer._id %>" onclick="makeAVote(this.value)">
+                      Vote <i> <%=answer.voters.length%></i></button>
+                    <h6 class="right-align"><i style="font-size:10px;"><%=answer.date %></i></h6>
+                    <% if (answer.idOfPoster === user.userID) {%>
+                    <a href="javascript:edit('answer','<%=answer.id %>')" style="text-transform:capitalize; font-size:10px;">Edit</a>
+                    <a href="javascript:deletes('answer','<%=answer.id %>')" style="text-transform:capitalize; font-size:10px;">Delete</a>
+                    <% } %>
+                  <% }); %>
+              </div>
+               <!--Response -->
+            <!-- Question-->
+          </div>
+          <!-- Question holder -->
+        </div>
+        <!-- Question card -->
+        <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
+        <!-- To be Fixed -->
+        <div class="col s3 card ">
+          <h4>User Activities</h4>
+          <div>
+            <button class="btn grey" style="font-size:11px;">Ask a Question / Add a Resource</button>
+            <div class="input-field col s12">
+               <input placeholder="Search For a Question" id="first_name" type="text" class="validate">
+            </div>
+          </div>
+          <div id='searchResultDisplay'>
+            <ul>
+            </ul>
+          </div>
+          <!-- Your Answer -->
+          <div class="col s12">
+          <form action="#">
+          <h4 class="center-align">Add your Answer</h4>
+          <div class="row">
+            <span id="msgdisplay"></span>
+            <div class="input-field col s12">
+              <textarea id="answer" class="materialize-textarea" required maxlength="200" name="answer"></textarea>
+              <label for="textarea1">Enter your Question.</label>
+            </div>
+              <input type="hidden" value="<%=question._id %>" id="questionid" />
+            <div>
+              <span><i>200 Characters Allowed.</i></span>
+            </div>
+          <button class="btn waves-effect waves-light grey" type="button" name="action" onclick="addAnswer()">Submit
+              <i class="material-icons right">send</i>
+          </button>
+          </div>
+      </form>
+        </div>
+      </div>
+      <div class="col s1">&nbsp;&nbsp;&nbsp;</div>
+  <script src="js/validate.js" type="text/javascript"></script>
+  <script>
+  $(document).ready(function(){
+    $("#editorform").hide();
+  });
+      function addAnswer() {
+        const questionId =$('#questionid').val();
+        const answer =$('#answer').val();
+        if (answer == ''){
+          $('#msgdisplay').text('Please Supply an Answer');
+        } else {
+        $.post('/addAnswer',{answer:answer, questionid: questionId}, function(response){
+           $('#msgdisplay').text(response);
+           location.reload();
+        });
+      }
+      }
+
+      function makeAVote(answerId) {
+        $.post('/addvote', {answerid: answerId}, function(response){
+           $('#centralDisplay').text(response);
+           location.reload();
+        });
+      }
+
+      function edit(type, key){
+        if (type === 'question'){
+            $('#edit<%=question.id %>').removeAttr('disabled');
+        } else {
+            $('#answer<%=question.id %>').removeAttr('disabled');
+        }
+      }
+
+      function saveEdit(val, type, id){
+        alert(val.trim());alert(type);alert(id);
+        $.post('/saveEdits', {type: type, val: val.trim(), key:id}, function(response){
+           $('#centralDisplay').text(response);
+           //location.reload();
+        });
+      }
+
+      function deletes(type, key){
+        if (type === 'question'){
+          $.post('/delete',{type:type, key:key}, function(response){
+            $('#centralDisplay').text(response);
+            window.location = '/forum';
+          });
+        } else {
+          $.post('/delete',{type:type, key:key}, function(response){
+            $('#centralDisplay').text(response);
+            window.location = '/forum';
+          });
+        }
+      }
+      function addViews() {
+        $.post('/addviews', function(response){
+           $('#msgdisplay').text(response);
+        });
+      }
+    window.onload = addViews();
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+   </body>
+</html>
